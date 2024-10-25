@@ -1,6 +1,7 @@
 
 package video.store;
 
-public class SellerPage {
+public class SellerPage 
+{
     
 }
