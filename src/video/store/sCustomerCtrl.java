@@ -28,24 +28,24 @@ public class sCustomerCtrl {
         this.purchasedVids = purchasedVids;
     }
 
-    public void addTofavorites(sVideoViewer vid){
+    public void addTofavorites(Video vid){
         // add vid to favoritesVids
     }
 
-    public void addToCart(sVideoViewer vid){
+    public void addToCart(Video vid){
         // add vid to customerOrders
     }
 
-    public void purchase(sVideoViewer vid){
+    public void purchase(Video vid){
         // add vid to purchasedVids
     }
 
-    public sVideoViewer searchVid(String key){
+    public Video searchVid(String key){
         // search for key in all videos
         return null;
     }
 
-    public sVideoViewer[] displayVids() {
+    public Video[] displayVids() {
         return null;
     }
 
