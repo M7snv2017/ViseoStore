@@ -14,11 +14,11 @@ public class sCustomerCtrl {
     private String customerPassword;
     private String cudtomerPhoneNumber;
     private sOrderViewer[] customerOrders;
-    private sVideoViewer[] favoritesVids;
-    private sVideoViewer[] purchasedVids;
+    private Video[] favoritesVids;
+    private Video[] purchasedVids;
 
 
-    public sCustomerCtrl(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber, sOrderViewer[] customerOrders, sVideoViewer[] favoritesVids, sVideoViewer[] purchasedVids) {
+    public sCustomerCtrl(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber, sOrderViewer[] customerOrders, Video[] favoritesVids, Video[] purchasedVids) {
         this.customerId = customerId;
         this.customerUserName = customerUserName;
         this.customerPassword = customerPassword;
