@@ -1,6 +1,7 @@
 
 package video.store;
 
-public class Login {
+public class Login
+{
     
 }
