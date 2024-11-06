@@ -86,21 +86,23 @@ public class cAcount extends JFrame
         gbc.anchor = GridBagConstraints.WEST;
         add(passLabel, gbc);
 
-        passField = new JPasswordField(15);
+        passField = new JPasswordField("Hello",15);
         passField.setEditable(false);
         gbc.gridx = 1;
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         add(passField, gbc);
         
-        //Icon passIcon = new ImageIcon(getClass().getResource("_!see.jpeg"));
-
         
-        
-        Icon passIcon = new ImageIcon(getClass().getResource("_!see.png"));
 
-        System.out.println(getClass().getResource("_!see.png"));
-        showPass = new JButton(passIcon);
+//        Icon passIcon = new ImageIcon(getClass().getResource("_!see.jpeg"));
+//        System.out.println(getClass().getResource("/ViseoStore/src/video/store/_!see.png"));
+//        System.out.println("C:\\Users\\M7sn9\\OneDrive\\Documents\\NetBeansProjects\\New folder\\ViseoStore\\src\\video\\store\\_!see.png");
+//        Icon passIcon = new ImageIcon(getClass().getResource("/video/store/_!see.png"));
+//        Icon passIcon = new ImageIcon(getClass().getResource("_!see.png"));
+
+
+        showPass = new JButton("Show");
         showPass.setSize(new Dimension(5,5));
         gbc.insets = new Insets(5,10,5,0); 
         gbc.gridx = 2;
@@ -110,14 +112,33 @@ public class cAcount extends JFrame
         showPass.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Hi");
+//                JOptionPane.showMessageDialog(null, "Hi");
+                if (showPass.getText().equals("Hide")) {
+                    passField.setEchoChar('\u2022');
+                    showPass.setText("Show");
+                } 
+                else {
+                    passField.setEchoChar((char) 0);
+                    showPass.setText("Hide");
+                }
             }
         });
-        add(showPass, gbc);//ggggggggggiiiiiiiiiiiivvvvvvvvveeeeeeeeee uuuuuuuuuppppppppp
-        
+        add(showPass, gbc);
         
         updateButton = new JButton("Upadte Information");
-        
+        gbc.insets = new Insets(5,0,5,0);
+        gbc.gridx=1;
+        gbc.gridy=4;
+        gbc.gridwidth=2;
+        gbc.fill= GridBagConstraints.WEST;
+        updateButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "UpdateFrame will show here");
+            }
+        });
+        add(updateButton,gbc);
+        validate();
     }
     public static void main(String[] args) {
         new cAcount();
