@@ -1,13 +1,19 @@
 package video.store;
 
-import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -86,6 +92,32 @@ public class cAcount extends JFrame
         gbc.gridy = 3;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         add(passField, gbc);
+        
+        //Icon passIcon = new ImageIcon(getClass().getResource("_!see.jpeg"));
+
+        
+        
+        Icon passIcon = new ImageIcon(getClass().getResource("_!see.png"));
+
+        System.out.println(getClass().getResource("_!see.png"));
+        showPass = new JButton(passIcon);
+        showPass.setSize(new Dimension(5,5));
+        gbc.insets = new Insets(5,10,5,0); 
+        gbc.gridx = 2;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.NONE;
+        showPass.setVisible(true);
+        showPass.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Hi");
+            }
+        });
+        add(showPass, gbc);//ggggggggggiiiiiiiiiiiivvvvvvvvveeeeeeeeee uuuuuuuuuppppppppp
+        
+        
+        updateButton = new JButton("Upadte Information");
+        
     }
     public static void main(String[] args) {
         new cAcount();
