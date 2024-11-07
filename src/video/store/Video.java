@@ -38,7 +38,7 @@ public class Video
         return rate;
     }
     
-    /*  
+    /*(Mustafa)  
     public void setGenre(String _genre) {
         for(String i: AcceptableGenres_array){
             if (_genre.equalsIgnoreCase(i))
@@ -74,10 +74,23 @@ public class Video
     }
     
     
+    public void setImage(ImageIcon _image) {
+        this.image = _image;
+    }
+    
     public ImageIcon getImage() {
         return image;
     }
-
+   
+    public void setPrice(int _price) {
+        this.price = _price;
+    }
+    
+    public int getPrice() {
+        return price;
+    }
+    
+    
 
 
 }
