@@ -14,10 +14,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class cAcount extends JFrame
+public class cAcount extends JPanel
 {
     JLabel acountTitle,
             phoneLabel,
@@ -28,10 +29,13 @@ public class cAcount extends JFrame
     JPasswordField passField;
     JButton showPass,//fancyButton
             updateButton;
+    UpdateAccount ua;
+    cAcount ca;
+    JPanel AccountPanel; 
     public cAcount()
     {
-        super("Acount");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        super("Acount");
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
         setVisible(true);
         
@@ -39,8 +43,10 @@ public class cAcount extends JFrame
         GridBagLayout gl = new GridBagLayout();
         setLayout(gl);
         
+        ca= this;
+        
         acountTitle = new JLabel("Acount Information");
-        acountTitle.setFont(new Font("Arial", Font.BOLD, 20));
+        acountTitle.setFont(new Font(Font.SERIF, Font.BOLD, 20));
         gbc.gridx=1;
         gbc.gridy=0;
         gbc.gridwidth=2;
@@ -57,7 +63,7 @@ public class cAcount extends JFrame
         gbc.anchor = GridBagConstraints.WEST;
         add(phoneLabel, gbc);
         
-        phoneField = new JTextField("HI", 10);
+        phoneField = new JTextField("0567891234", 10);
         gbc.insets = new Insets(5,5,5,0);  
         phoneField.setEditable(false);
         gbc.gridx = 1;
@@ -72,7 +78,7 @@ public class cAcount extends JFrame
         gbc.anchor = GridBagConstraints.WEST;
         add(userLabel, gbc);
         
-        userField = new JTextField("mvsbacj,h", 10);
+        userField = new JTextField("username", 10);
         gbc.insets = new Insets(5,5,5,0);  
         userField.setEditable(false);
         gbc.gridx = 1;
@@ -134,13 +140,11 @@ public class cAcount extends JFrame
         updateButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "UpdateFrame will show here");
+                    ua=new UpdateAccount(ca);
+                    //call function to open update account
             }
         });
         add(updateButton,gbc);
         validate();
-    }
-    public static void main(String[] args) {
-        new cAcount();
     }
 }
