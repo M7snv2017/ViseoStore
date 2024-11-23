@@ -1,22 +1,9 @@
 package video.store;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 
 public class cAcount extends JPanel
 {
@@ -32,10 +19,9 @@ public class cAcount extends JPanel
     UpdateAccount ua;
     cAcount ca;
     JPanel AccountPanel; 
+    
     public cAcount()
     {
-//        super("Acount");
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(900, 600);
         setVisible(true);
         
@@ -146,5 +132,15 @@ public class cAcount extends JPanel
         });
         add(updateButton,gbc);
         validate();
+    }
+
+    public static void main(String[] args) {
+        JFrame frm = new JFrame();
+        cAcount p = new cAcount();
+        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frm.setSize(900,600);
+        frm.setLocationRelativeTo(null);
+        frm.add(p);
+        frm.setVisible(true);
     }
 }

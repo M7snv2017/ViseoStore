@@ -9,13 +9,7 @@ import javax.swing.SwingUtilities;
  */
 public class Main {
     public static void main(String args[]) {
-         SwingUtilities.invokeLater(() -> {
-            cMain frm = new cMain();
-            frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frm.setSize(800,500);
-            frm.setLocationRelativeTo(null);
-            frm.setVisible(true);
-        });	
+         LoginPage frm = new LoginPage();
     }    
 }
 

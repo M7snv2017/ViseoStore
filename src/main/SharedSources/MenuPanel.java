@@ -65,6 +65,10 @@ public class MenuPanel extends JPanel {
             selectedButton = clickedButton;
         }
     }
+
+    public String getActionCommand() {
+        return selectedButton.getName();
+    }
     
     
 }

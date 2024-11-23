@@ -15,15 +15,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class cMain extends JFrame implements ActionListener {
     private CardLayout cardLayout;
     private JPanel main;
     private GridBagLayout layout;
     private GridBagConstraints gbc;
+    private ArrayList<Video> av;
+    private ArrayList<Video> fv;
     MenuPanel menu = new MenuPanel(this);
     SearchPanel search = new SearchPanel();
-    VideosList list = new VideosList();
+    VideosList allVideos;
+    VideosList favorite;
+    cAcount acount = new cAcount();
     
     public cMain() {
         super("Test");
@@ -64,9 +69,20 @@ public class cMain extends JFrame implements ActionListener {
         
         cardLayout = new CardLayout();
         main = new JPanel(cardLayout);
-        
-        //main.add(new VideosList(), "Main");
-        //main.add(new FavoriteList(), "Favorite");
+        Video e = new Video();
+        av = new ArrayList<Video>();
+        av.add(e);
+
+        fv = new ArrayList<Video>();
+        allVideos = new VideosList(av);
+        favorite = new VideosList(fv);
+
+        JScrollPane allVideoScrollPane = new JScrollPane(allVideos);
+        JScrollPane favoriteScrollPane = new JScrollPane(favorite);
+
+        main.add(allVideoScrollPane, "Main");
+        main.add(favoriteScrollPane, "Favorite");
+        //main.add(new cAcount(), "Account");
         
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -74,17 +90,26 @@ public class cMain extends JFrame implements ActionListener {
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         gbc.weighty = 10.0;
-        add(main);
-        JScrollPane scrollPane = new JScrollPane(list);
-        add(scrollPane, gbc); 
+        //add(main);
+        add(main, gbc); 
         
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = e.getActionCommand();
+        String command = menu.getActionCommand();
         switch (command) {
             case "Main" -> cardLayout.show(main, "Main");
-            case "Settings" -> cardLayout.show(main, "FavoriteList");
+            case "Favorite" -> cardLayout.show(main, "FavoriteList");
+            case "Account" -> cardLayout.show(main, "Account");
         }
+        repaint();
+    }
+
+    public static void main (String []args) {
+        cMain frm = new cMain();
+        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frm.setLocationRelativeTo(null);
+        frm.setSize(800,500);
+        frm.setVisible(true);
     }
 }
