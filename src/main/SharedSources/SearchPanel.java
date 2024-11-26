@@ -10,8 +10,8 @@ import javax.swing.*;
  * @author Mustafa
  */
 public class SearchPanel extends JPanel {
-    String category[] = {"Title", "Genre", "Director"};
-    JComboBox categories = new JComboBox(category);
+    String[] category = {"Title", "Genre", "Director"};
+    JComboBox<String> categories = new JComboBox<>(category);
     JTextField searchField = new JTextField(20);
     JButton submit = new JButton("Search");
     

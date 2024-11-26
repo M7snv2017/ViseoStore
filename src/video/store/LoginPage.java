@@ -1,30 +1,55 @@
 package video.store;
 
 /**
- *  This class was initially created by Abdulrahman, and improved by Mustafa since there was issues.
+ * This class was initially created by Abdulrahman, and improved by Mustafa
+ * since there was issues.
+ *
  * @author Mustafa
  */
-
-import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.*;
+import main.SharedSources.Util.placeHolderListener;
 
-import main.SharedSources.*;
-import main.SharedSources.Util.*;
+public class LoginPage extends JFrame {
 
-public class LoginPage extends JFrame implements ActionListener {
     static JLabel usernameLbl = new JLabel("Username:");
     static JLabel passwordLbl = new JLabel("Password:");
 
-    static JTextField username = new JTextField(20);
-    static JPasswordField password = new JPasswordField(20);
+    static JTextField usernameField = new JTextField(20);
+    static JPasswordField passwordField = new JPasswordField(20);
 
     static JButton loginBtn = new JButton("Login");
     static JButton cancelBtn = new JButton("Cancel");
 
     public LoginPage() {
+        loginBtn.addActionListener((ActionEvent e) -> {
+            performLogin();
+        });
+
+        // Add key listeners to text fields
+        usernameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    performLogin();
+                }
+            }
+        });
+
+        passwordField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    performLogin();
+                }
+            }
+        });
+
+        cancelBtn.addActionListener(e -> this.dispose());
+
         this.setTitle("Login Page");
         this.setSize(320, 220);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -43,9 +68,9 @@ public class LoginPage extends JFrame implements ActionListener {
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        username.setText("Enter Your Unsername");
-        username.addFocusListener(new placeHolderListener());
-        this.add(username, gbc);
+        usernameField.setText("Enter Your Unsername");
+        usernameField.addFocusListener(new placeHolderListener());
+        this.add(usernameField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -54,9 +79,9 @@ public class LoginPage extends JFrame implements ActionListener {
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        password.setText("Enter Your Password");
-        password.addFocusListener(new placeHolderListener());
-        this.add(password, gbc);
+        passwordField.setText("Enter Your Password");
+        passwordField.addFocusListener(new placeHolderListener());
+        this.add(passwordField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -72,19 +97,24 @@ public class LoginPage extends JFrame implements ActionListener {
         this.setVisible(true);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == loginBtn) {
-            String uName = username.getText();
-            String pass = password.getText();
-        }
+    private void performLogin() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
 
-        if (e.getSource() == cancelBtn) {
-
-        }
+        // Simple validation 
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(LoginPage.this, "Username or Password cannot be empty!", "Retry", JOptionPane.WARNING_MESSAGE);
+        } else if (!username.equals("admin") || !password.equals("password")) {
+            JOptionPane.showMessageDialog(LoginPage.this, "Invalid Username or Password!", "Invalid Information", JOptionPane.WARNING_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(LoginPage.this, "Welcome " + username, "Logged In", JOptionPane.INFORMATION_MESSAGE);
+            System.gc();
+            for (Window window : Window.getWindows()) {
+                window.dispose();
+            }
+        //here get id of the user & pass it to cMain
+            cMain main = new cMain();
+            main.setVisible(true);
     }
-
-    public static void main(String[] args) {
-        LoginPage frm = new LoginPage();
-    }
+}
 }

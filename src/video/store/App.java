@@ -6,9 +6,11 @@ import javax.swing.SwingUtilities;
 public class App {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            cMain frm = new cMain();
+            HomePage frm = new HomePage();
+            frm.requestFocus();
             frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frm.setSize(800,500);
+            frm.setSize(450,330);
+            frm.setResizable(false);
             frm.setLocationRelativeTo(null);
             frm.setVisible(true);
         });	

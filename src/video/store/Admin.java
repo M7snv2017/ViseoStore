@@ -1,7 +1,7 @@
 
 package video.store;
 
-public class Seller 
+public class Admin 
 {
     //attributes
     String firstName
@@ -10,12 +10,12 @@ public class Seller
     int id;
     
     //constructors
-    public Seller() 
+    public Admin() 
     {
         
     }
 
-    public Seller(String firstName, String lastName, String password, int id) {
+    public Admin(String firstName, String lastName, String password, int id) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;

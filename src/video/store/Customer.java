@@ -8,7 +8,7 @@ package video.store;
  *
  * @author M7sn9
  */
-public class sCustomerCtrl {
+public class Customer {
     private int customerId;
     private String customerUserName;
     private String customerPassword;
@@ -18,7 +18,7 @@ public class sCustomerCtrl {
     private Video[] purchasedVids;
 
 
-    public sCustomerCtrl(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber, sOrderViewer[] customerOrders, Video[] favoritesVids, Video[] purchasedVids) {
+    public Customer(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber, sOrderViewer[] customerOrders, Video[] favoritesVids, Video[] purchasedVids) {
         this.customerId = customerId;
         this.customerUserName = customerUserName;
         this.customerPassword = customerPassword;
@@ -26,6 +26,10 @@ public class sCustomerCtrl {
         this.customerOrders = customerOrders;
         this.favoritesVids = favoritesVids;
         this.purchasedVids = purchasedVids;
+    }
+
+    public int getId(){
+        return customerId;
     }
 
     public void addTofavorites(Video vid){
@@ -68,7 +72,5 @@ public class sCustomerCtrl {
     public void displayFavoritesVids(){
         // display favoritesVids
     }
-
-
 
 }

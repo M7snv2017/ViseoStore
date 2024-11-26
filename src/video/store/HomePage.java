@@ -5,12 +5,13 @@ package video.store;
  * @author Mustafa
  */
 
-import main.SharedSources.*;
-import javax.swing.*;
-
-import static main.SharedSources.Util.createButton;
-
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.*;
+import main.SharedSources.*;
+import static main.SharedSources.Util.createButton;
 
 public class HomePage extends JFrame {
     private final Color ButtonBgColor = new Color(59, 89, 182);
@@ -19,6 +20,16 @@ public class HomePage extends JFrame {
 
     public HomePage() {
         super("Home Page");
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    LoginPage login = new LoginPage();
+                    login.setVisible(true);
+                }
+            }
+        });
+        
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(Box.createRigidArea(new Dimension(0, 30)));
@@ -50,12 +61,20 @@ public class HomePage extends JFrame {
         Util.hoverListener(loginButton);
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createRigidArea(new Dimension(0, 30)));
+        loginButton.addActionListener((ActionEvent e) -> {
+            LoginPage login = new LoginPage();
+            login.setVisible(true);
+        });
         panel.add(loginButton);
 
         JButton registerButton = createButton("Register", ButtonBgColor, ButtonFgColor, ButtonFont);
         Util.hoverListener(registerButton);
         registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createRigidArea(new Dimension(0, 5)));
+        registerButton.addActionListener((ActionEvent e) -> {
+            RegistrationPage register = new RegistrationPage();
+            register.setVisible(true);
+        });
         panel.add(registerButton);
 
         JLabel adminLoginLabel = new JLabel("Login as an admin", SwingConstants.CENTER);
@@ -73,6 +92,7 @@ public class HomePage extends JFrame {
     public static void main (String []args) {
         SwingUtilities.invokeLater(() -> {
             HomePage frm = new HomePage();
+            frm.requestFocus();
             frm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frm.setSize(450,330);
             frm.setResizable(false);

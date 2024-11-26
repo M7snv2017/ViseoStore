@@ -7,15 +7,14 @@ package video.store;
  * @author Mustafa
  */
 
-import main.SharedSources.SearchPanel;
-import main.SharedSources.MenuPanel;
-import main.SharedSources.VideosList;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import javax.swing.*;
+import main.SharedSources.MenuPanel;
+import main.SharedSources.SearchPanel;
+import main.SharedSources.VideosList;
 
 public class cMain extends JFrame implements ActionListener {
     private CardLayout cardLayout;
@@ -28,14 +27,16 @@ public class cMain extends JFrame implements ActionListener {
     SearchPanel search = new SearchPanel();
     VideosList allVideos;
     VideosList favorite;
-    cAcount acount = new cAcount();
+    AccountPage account = new AccountPage();
     
     public cMain() {
         super("Test");
-        setPreferredSize(new Dimension(800, 500));
-      
-        layout = new GridBagLayout();
-        setLayout(layout);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+        this.setSize(800,500);
+        this.setVisible(true);
+
+        this.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         
         gbc.fill = GridBagConstraints.BOTH;
@@ -79,10 +80,12 @@ public class cMain extends JFrame implements ActionListener {
 
         JScrollPane allVideoScrollPane = new JScrollPane(allVideos);
         JScrollPane favoriteScrollPane = new JScrollPane(favorite);
+        //JScrollPane allVideoScrollPane = new JScrollPane(cart);
 
         main.add(allVideoScrollPane, "Main");
         main.add(favoriteScrollPane, "Favorite");
-        //main.add(new cAcount(), "Account");
+        main.add(account, "Account");
+        
         
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
@@ -96,10 +99,12 @@ public class cMain extends JFrame implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        String command = menu.getActionCommand();
+        String command = e.getActionCommand();
         switch (command) {
             case "Main" -> cardLayout.show(main, "Main");
             case "Favorite" -> cardLayout.show(main, "FavoriteList");
+            case "Cart" -> cardLayout.show(main, "Cart");
+            case "Purchases" -> cardLayout.show(main, "Purchases");
             case "Account" -> cardLayout.show(main, "Account");
         }
         repaint();
@@ -107,9 +112,5 @@ public class cMain extends JFrame implements ActionListener {
 
     public static void main (String []args) {
         cMain frm = new cMain();
-        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frm.setLocationRelativeTo(null);
-        frm.setSize(800,500);
-        frm.setVisible(true);
     }
 }

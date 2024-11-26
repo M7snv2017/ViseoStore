@@ -1,128 +1,113 @@
-
 package video.store;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+/**
+ *  This class was initially created by Mohsin, and improved by Mustafa.
+ * @author Mustafa
+ */
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import java.awt.event.WindowEvent;
+import javax.swing.*;
+import main.SharedSources.Util;
+import main.SharedSources.Util.placeHolderListener;
 
-public class UpdateAccount extends JPanel
-{
-    JLabel  title,
-            phoneNO,
-            username,
-            password,
-            confirmPass;
-    JTextField tphoneNO,
-               tusername;
-    JPasswordField tpassword,
-               tconfirmPass;
-    JButton update;
+public class UpdateAccount extends JFrame implements ActionListener {
+    static int customer_id;
     
-    public UpdateAccount(cAcount back){
-//        super("Update Acount");
-//        
-//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        setVisible(true);
-        setSize(900,600);
-        
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        
-        Insets ins1 = new Insets(0,0,10,10);
-        Insets ins2 = new Insets(120,0,10,10);
-        gbc.gridy=0;
-        gbc.gridwidth=2;
-        gbc.fill = GridBagConstraints.NORTH;
-        title = new JLabel("Update Information");
-        title.setFont(new Font(Font.SERIF, Font.BOLD, 20));
-        add(title,gbc);
-        
-        gbc.insets=ins2;
-        gbc.gridwidth=1;
-        
-        //phone
-        gbc.gridy++;
-        gbc.gridx=0;
-        
-        phoneNO = new JLabel("Phone No.");
-        add(phoneNO,gbc);
-        
-        gbc.gridx++;
-        tphoneNO = new JTextField(16);
-        add(tphoneNO,gbc);
-        
-        gbc.insets=ins1;
-        //username
-        gbc.gridy++;
-        gbc.gridx=0;
-        username = new JLabel("UserName");
-        add(username,gbc);
-        
-        gbc.gridx++;
-        tusername = new JTextField(16);
-        add(tusername,gbc);
-        
-        //password
-        gbc.gridy++;
-        gbc.gridx=0;
-        password = new JLabel("Password");
-        add(password,gbc);
-        
-        gbc.gridx++;
-        tpassword = new JPasswordField(16);
-        add(tpassword,gbc);
-        
-        //Confirm Password
-        gbc.gridy++;
-        gbc.gridx=0;
-        confirmPass = new JLabel("Password");
-        add(confirmPass,gbc);
-        
-        gbc.gridx++;
-        tconfirmPass = new JPasswordField(16);
-        add(tconfirmPass,gbc);
-        
-        gbc.gridy++;
-        gbc.gridwidth+=3;
-        gbc.fill = GridBagConstraints.CENTER;
-        update = new JButton("Update");
-        update.addActionListener(
-                new ActionListener()
-                {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int result = JOptionPane.showConfirmDialog(null,
-                                "Are you sure you want to proceed?",
-                                "Confirmation",
-                                JOptionPane.OK_CANCEL_OPTION
-                        );
+    static JLabel usernameLbl = new JLabel("Username:");
+    static JLabel passwordLbl = new JLabel("Password:");
+    static JLabel password2Lbl = new JLabel("Confirm Password:");
 
-                        // Check if OK button was clicked
-                        if (result == JOptionPane.OK_OPTION) {
-                            
-                            back.setVisible(true);
-                            setVisible(false);
-                            
-                            //call function to open update account
-                        }
-                    }
-                });
-        add(update,gbc);
+    static JTextField username = new JTextField(20);
+    static JPasswordField password = new JPasswordField(20);
+    static JPasswordField password2 = new JPasswordField(20);
+
+    static JButton updateBtn = new JButton("Update");
+    static JButton cancelBtn = new JButton("Cancel");
+
+    public UpdateAccount(int id) {
         
-        // to show them without need to resize the frame
-        validate();
+        customer_id = id;
+        
+        this.setTitle("Update Information");
+        this.setSize(400, 250);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        gbc.weighty = 0.1;
+        gbc.weightx = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(usernameLbl, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        username.setText("Enter New Username");
+        username.addFocusListener(new placeHolderListener());
+        this.add(username, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(passwordLbl, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        password.setText("Enter New Password");
+        password.addFocusListener(new placeHolderListener());
+        this.add(password, gbc);
+
+        JToggleButton showPass = Util.createShowHide(password, password2);
+        gbc.gridx = 2;
+        this.add(showPass, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(password2Lbl, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        password2.setText("Confirm Password");
+        password2.addFocusListener(new placeHolderListener());
+        this.add(password2, gbc);
+
+        updateBtn.addActionListener(this);
+        cancelBtn.addActionListener(this);
+        
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        this.add(updateBtn, gbc);
+
+        gbc.anchor = GridBagConstraints.LINE_END;
+        this.add(cancelBtn, gbc);
+
+        this.setVisible(true);
     }
-//    public static void main(String[] args) {
-//        new UpdateAccount(null);
-//    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == updateBtn) {
+            String uName = username.getText();
+            String pass = password.getText();
+            JOptionPane.showMessageDialog(null, " Information Updated Successfully.");
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
+
+        if (e.getSource() == cancelBtn) {
+            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
+    }
+
+    public static void main(String[] args) {
+        UpdateAccount frm = new UpdateAccount(1);
+    }
 }
+

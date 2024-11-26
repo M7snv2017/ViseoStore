@@ -29,29 +29,26 @@ public class MenuPanel extends JPanel {
         Color fgColor = Color.BLACK;
         Font font = new Font("Arial", Font.BOLD, 16);
         
-        String[] bNames = {"Main", "Favorite", "Cart", "Account"};
-        for(int i=0; i<4; i++) {
+        String[] bNames = {"Main", "Favorite", "Cart", "Purchases", "Account"};
+        for(int i=0; i<5; i++) {
             JButton button = Util.createButton(bNames[i], bgColor, fgColor, font);
             button.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
 
+            button.setActionCommand(bNames[i]);
             button.addActionListener(new ActionListenerImpl());
             button.addActionListener(listener);
-            Util.addComponent(this, button, i!=3?i:++i, 0, 1.0, 1.0);
+
+            Util.addComponent(this, button, i!=4?i:++i, 0, 1.0, 1.0);
         }
         
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         constraints.gridx = 1;
         constraints.weighty = 10.0;
         add(Box.createVerticalGlue(), constraints);  
     }
     
     private static class ActionListenerImpl implements ActionListener {
-
-        public ActionListenerImpl() {
-        }
-
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton clickedButton = (JButton) e.getSource();
@@ -61,14 +58,7 @@ public class MenuPanel extends JPanel {
             }
             clickedButton.setBackground(new Color(60,60,60));
             clickedButton.setForeground(Color.WHITE);
-            
             selectedButton = clickedButton;
         }
     }
-
-    public String getActionCommand() {
-        return selectedButton.getName();
-    }
-    
-    
 }
