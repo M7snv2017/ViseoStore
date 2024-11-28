@@ -51,7 +51,6 @@ public class java {
                 resultSet.close();
                 statement.close();
 
-                System.out.println("Rows inserted successfully!");
 
                 // Close the statement
                 statement.close();
