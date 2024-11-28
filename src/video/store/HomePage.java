@@ -89,6 +89,7 @@ public class HomePage extends JFrame {
         setVisible(true);
     }
 
+    //for test
     public static void main (String []args) {
         SwingUtilities.invokeLater(() -> {
             HomePage frm = new HomePage();

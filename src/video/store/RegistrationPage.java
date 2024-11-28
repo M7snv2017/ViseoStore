@@ -124,6 +124,7 @@ public class RegistrationPage extends JFrame {
         } 
     }  
 
+    //for test
     public static void main(String[] args) {
         RegistrationPage frm = new RegistrationPage();
     }

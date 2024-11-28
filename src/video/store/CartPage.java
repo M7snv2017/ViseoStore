@@ -64,20 +64,6 @@ public class CartPage extends JPanel {
         JScrollPane cart = new JScrollPane(cartItems);
         this.add(cart, BorderLayout.CENTER);
     }
-
-    public static void main(String[] args) {
-        JFrame frm = new JFrame();
-        ArrayList<Video> videos = new ArrayList();
-        Video video = new Video();
-        
-        CartPage p = new CartPage(videos);
-
-        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frm.setSize(800, 500);
-        frm.setLocationRelativeTo(null);
-        frm.add(p);
-        frm.setVisible(true);
-    }
     
     private JPanel createCartItem(int i, Video video) {
         JPanel itemPanel = new JPanel();
@@ -125,5 +111,20 @@ public class CartPage extends JPanel {
         itemPanel.add(removeButton);
 
         return itemPanel;
+    }
+
+    //For test
+    public static void main(String[] args) {
+        JFrame frm = new JFrame();
+        ArrayList<Video> videos = new ArrayList();
+        Video video = new Video();
+        
+        CartPage p = new CartPage(videos);
+
+        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frm.setSize(800, 500);
+        frm.setLocationRelativeTo(null);
+        frm.add(p);
+        frm.setVisible(true);
     }
 }

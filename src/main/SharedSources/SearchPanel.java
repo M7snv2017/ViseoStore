@@ -20,7 +20,6 @@ public class SearchPanel extends JPanel {
     }
     
     private void initialize() {
-        setPreferredSize(new Dimension(570, 50));
         setLayout(new FlowLayout());
         
         JLabel lbl1 = new JLabel("Search by");

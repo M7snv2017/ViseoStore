@@ -20,15 +20,12 @@ import video.store.VideoInfoFrame;
 
 public class VideosList extends JPanel {
 
-    private ArrayList<Video> videos = new ArrayList<>();
-
-    public VideosList(ArrayList<Video> v) {
-        videos = v;
-        initialize();
+    public VideosList(ArrayList<Video> vl) {  //vl: videos list
+        initialize(vl);
     }
 
-    private void initialize() {
-        if (videos.isEmpty()) {
+    private void initialize(ArrayList<Video> vl) {
+        if (vl.isEmpty()) {
             JLabel lbl = new JLabel("List is Empty");
             lbl.setFont(new Font("Arial", Font.BOLD, 16));
             lbl.setForeground(Color.red);
@@ -37,7 +34,7 @@ public class VideosList extends JPanel {
             setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
             int i = 0;
-            for (var v : videos) {
+            for (var v : vl) {
                 add(addVideo(v, ++i));
             }
         }

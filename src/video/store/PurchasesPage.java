@@ -82,6 +82,8 @@ public class PurchasesPage extends JPanel {
 
         return itemPanel;
     }   
+    
+    //for test
     public static void main(String[] args) {
         JFrame frm = new JFrame();
         ArrayList<Video> videos = new ArrayList();

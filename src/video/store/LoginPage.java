@@ -113,7 +113,7 @@ public class LoginPage extends JFrame {
                 window.dispose();
             }
         //here get id of the user & pass it to cMain
-            cMain main = new cMain();
+            CStream main = new CStream();
             main.setVisible(true);
     }
 }

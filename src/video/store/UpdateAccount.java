@@ -106,6 +106,7 @@ public class UpdateAccount extends JFrame implements ActionListener {
         }
     }
 
+    //for test
     public static void main(String[] args) {
         UpdateAccount frm = new UpdateAccount(1);
     }

@@ -124,6 +124,7 @@ public class AccountPage extends JPanel
         this.add(borderPanel, BorderLayout.CENTER);
     }
 
+    //For test
     public static void main(String[] args) {
         JFrame frm = new JFrame();
         AccountPage p = new AccountPage();
