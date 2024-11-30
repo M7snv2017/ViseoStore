@@ -2,7 +2,7 @@ package video.store;
 
 import javax.swing.ImageIcon;
 
-public class Video {
+public class Video  {
 
     private int id, //(Mustafa) for ID, a value must be automatically assigned, using sequence for example.
             purchaseFrequency, //(Mustafa) Rate replaced. Rating seems to be complext.
@@ -15,11 +15,11 @@ public class Video {
             videoSource,
             year;
     private ImageIcon image;
-
+    CartPage cart;
     public Video() {
     }
 
-    public Video(int id, int purchaseFrequency, int price, String title, String director, String synopsis, String ageGroup, String genre, String videoSource, String year, ImageIcon image) {
+    public Video(int id, int purchaseFrequency, int price, String title, String director, String synopsis, String ageGroup, String genre, String videoSource, String year, ImageIcon image,CartPage cart) {
         this.id = id;
         this.purchaseFrequency = purchaseFrequency;
         this.price = price;
@@ -31,6 +31,7 @@ public class Video {
         this.videoSource = videoSource;
         this.year = year;
         this.image = image;
+        this.cart=cart;
     }
     
     public Video(int id, int purchaseFrequency, int price, String ageGroup, String genre, String videoSource, ImageIcon image) {

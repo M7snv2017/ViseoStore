@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package video.store;
 
+package video.store;
+import java.sql.*;
 /**
  *
  * @author M7sn9
@@ -13,21 +10,50 @@ public class Customer {
     private String customerUserName;
     private String customerPassword;
     private String cudtomerPhoneNumber;
-    private sOrderViewer[] customerOrders;
-    private Video[] favoritesVids;
-    private Video[] purchasedVids;
 
 
-    public Customer(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber, sOrderViewer[] customerOrders, Video[] favoritesVids, Video[] purchasedVids) {
+    public Customer(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber) {
         this.customerId = customerId;
         this.customerUserName = customerUserName;
         this.customerPassword = customerPassword;
         this.cudtomerPhoneNumber = cudtomerPhoneNumber;
-        this.customerOrders = customerOrders;
-        this.favoritesVids = favoritesVids;
-        this.purchasedVids = purchasedVids;
     }
 
+    public static int newid() {
+    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559";
+    String user = "sql12747559";
+    String pass = "zdI3qyjlca";
+
+    int x = 0; // Set to 0 to indicate no value has been retrieved yet
+    String sql = "SELECT MAX(id) AS last_number FROM Customer";
+
+    try (Connection connection = DriverManager.getConnection(url, user, pass);
+         Statement statement = connection.createStatement();
+         ResultSet resultSet = statement.executeQuery(sql)) {
+
+        if (resultSet.next()) {
+            // If the result is null, return 1, else return last_number + 1
+            x = resultSet.getInt("last_number");
+            if (resultSet.wasNull()) {
+                x = 0; // Handle the case when the table is empty
+            }
+        }
+
+    } catch (SQLException e) {
+        // Handle the exception, and maybe return a default ID or throw a custom exception
+        e.printStackTrace();
+        // Optionally show user-friendly message or return a default ID
+        return -1; // Return -1 to indicate an error
+    }
+
+    return x + 1; // Return the next ID
+}
+
+    
+    
+    
+    
+    
     public int getId(){
         return customerId;
     }

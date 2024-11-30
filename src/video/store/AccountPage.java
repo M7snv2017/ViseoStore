@@ -24,7 +24,7 @@ public class AccountPage extends JPanel
     Customer c;
     static JButton updateButton;
     
-    public AccountPage()
+    public AccountPage(Customer customer)
     {
         this.setLayout(new BorderLayout(10,20));
         JPanel borderPanel = new JPanel();
@@ -32,6 +32,8 @@ public class AccountPage extends JPanel
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        
+        c=customer;
         
         JLabel title = new JLabel("Acount Information", SwingConstants.CENTER);
         title.setFont(new Font(Font.SERIF, Font.BOLD, 20));
@@ -82,9 +84,6 @@ public class AccountPage extends JPanel
         gbc.fill = GridBagConstraints.HORIZONTAL;
         infoPanel.add(passField, gbc);
         
-
-
-
         JToggleButton showPass = Util.createShowHide(passField);
 
         showPass.setSize(new Dimension(5,5));
@@ -110,9 +109,9 @@ public class AccountPage extends JPanel
             private UpdateAccount updateAccount;
 
             @Override
-            public void actionPerformed(ActionEvent e) {
-                    updateAccount = new UpdateAccount(c.getId());
-                    //call function to open update account
+            public void actionPerformed(ActionEvent e) 
+            {
+                updateAccount = new UpdateAccount(c.getId());
             }
         });
         infoPanel.add(updateButton,gbc);
@@ -127,7 +126,7 @@ public class AccountPage extends JPanel
     //For test
     public static void main(String[] args) {
         JFrame frm = new JFrame();
-        AccountPage p = new AccountPage();
+        AccountPage p = new AccountPage(null);
         frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frm.setSize(900,600);
         frm.setLocationRelativeTo(null);

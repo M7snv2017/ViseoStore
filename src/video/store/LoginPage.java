@@ -6,11 +6,13 @@ package video.store;
  *
  * @author Mustafa
  */
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
+import java.sql.*;
 import main.SharedSources.Util.placeHolderListener;
 
 public class LoginPage extends JFrame {
@@ -23,8 +25,9 @@ public class LoginPage extends JFrame {
 
     static JButton loginBtn = new JButton("Login");
     static JButton cancelBtn = new JButton("Cancel");
-
+    CStream main;
     public LoginPage() {
+        
         loginBtn.addActionListener((ActionEvent e) -> {
             performLogin();
         });
@@ -96,7 +99,8 @@ public class LoginPage extends JFrame {
 
         this.setVisible(true);
     }
-
+    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559";
+   
     private void performLogin() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
@@ -108,13 +112,15 @@ public class LoginPage extends JFrame {
             JOptionPane.showMessageDialog(LoginPage.this, "Invalid Username or Password!", "Invalid Information", JOptionPane.WARNING_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(LoginPage.this, "Welcome " + username, "Logged In", JOptionPane.INFORMATION_MESSAGE);
-            System.gc();
             for (Window window : Window.getWindows()) {
                 window.dispose();
             }
-        //here get id of the user & pass it to cMain
-            CStream main = new CStream();
+            Customer c= new Customer(1, "", password, username);
+            main = new CStream(c);
             main.setVisible(true);
+            System.gc();for (Window window : Window.getWindows()) {
+                window.dispose();
+            }
+        }
     }
-}
 }

@@ -1,10 +1,10 @@
 package video.store;
-
+//37.121.237.221
 /**
  * 
  * @author Mustafa
  */
-
+import java.sql.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -14,6 +14,9 @@ import main.SharedSources.Util;
 import main.SharedSources.Util.placeHolderListener;
 
 public class RegistrationPage extends JFrame {
+    
+String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";
+
     static JLabel usernameLbl = new JLabel("Username:");
     static JLabel passwordLbl = new JLabel("Password:");
     static JLabel password2Lbl = new JLabel("Confirm Password:");
@@ -37,7 +40,7 @@ public class RegistrationPage extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    performRegisteration();
+                    performRegistration();
                 }
             }
         };
@@ -89,7 +92,7 @@ public class RegistrationPage extends JFrame {
         this.add(password2Field, gbc);
 
         registerBtn.addActionListener((ActionEvent e) -> {
-            performRegisteration();
+            performRegistration();
         });
 
         cancelBtn.addActionListener(e -> this.dispose());
@@ -105,24 +108,91 @@ public class RegistrationPage extends JFrame {
         this.setVisible(true);
     
     }
+//    public void validateLogin(String enteredUsername, String enteredPassword) {
+//    String sqlCheckUser = "SELECT password FROM customer WHERE username = ?";
+//
+//    try (Connection connection = DriverManager.getConnection(url, username, password);
+//         PreparedStatement stmt = connection.prepareStatement(sqlCheckUser)) {
+//
+//        // Set the username parameter in the query
+//        stmt.setString(1, enteredUsername);
+//
+//        // Execute the query
+//        try (ResultSet rs = stmt.executeQuery()) {
+//            if (rs.next()) {
+//                // Username exists, check the password
+//                String storedPassword = rs.getString("password");
+//                if (storedPassword.equals(enteredPassword)) {
+//                    JOptionPane.showMessageDialog(null, "Login Successful", "Welcome", JOptionPane.INFORMATION_MESSAGE);
+//                } else {
+//                    JOptionPane.showMessageDialog(null, "Incorrect Password", "Retry", JOptionPane.ERROR_MESSAGE);
+//                }
+//            } else {
+//                // Username does not exist
+//                JOptionPane.showMessageDialog(null, "Username does not exist", "Retry", JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
+//
+//    } catch (SQLException e) {
+//        JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+//        e.printStackTrace();
+//    }
+//}
+    public boolean exist(String username) {
+       String sql = "SELECT COUNT(*) AS exist FROM Customer WHERE username = '" + username + "'";
 
-    private void performRegisteration() {
-        String username = usernameField.getText(); 
-        String password = new String(passwordField.getPassword());
-        String password2 =  new String(password2Field.getPassword());
+       try (Connection connection = DriverManager.getConnection(url);
+            Statement stmt = connection.createStatement()) {
 
-        // Simple validation 
-        if (username.isEmpty() || password.isEmpty() || password2.isEmpty()) { 
-            JOptionPane.showMessageDialog(RegistrationPage.this, "All Fields are Required", "Retry" ,JOptionPane.WARNING_MESSAGE);
-        } else if (username.equals("USER NAME EXISTS")) { 
-            JOptionPane.showMessageDialog(RegistrationPage.this, "Username Already Exists", "Used Username" ,JOptionPane.ERROR_MESSAGE);
-        } else if (!password.equals(password2)) {
-            JOptionPane.showMessageDialog(RegistrationPage.this, "Passwords Do not Match", "Retry" ,JOptionPane.ERROR_MESSAGE);
-        } else { 
-            JOptionPane.showMessageDialog(RegistrationPage.this, "Account Registered Successfully.", "Welcome" ,JOptionPane.INFORMATION_MESSAGE);
-            RegistrationPage.this.dispose();
-        } 
-    }  
+           try (ResultSet rs = stmt.executeQuery(sql)) {
+               if (rs.next()) {
+                   return rs.getInt("exist") > 0; // Check if username exists
+               }
+           }
+       } catch (SQLException e) {
+           JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+           e.printStackTrace();
+           
+       }
+       return false;
+   }
+
+
+   private void performRegistration() {
+    String username = usernameField.getText(); 
+    String password = new String(passwordField.getPassword());
+    String password2 = new String(password2Field.getPassword());
+
+    if (username.isEmpty() || password.isEmpty() || password2.isEmpty()) { 
+        JOptionPane.showMessageDialog(RegistrationPage.this, "All Fields are Required", "Retry", JOptionPane.WARNING_MESSAGE);
+    } else if (exist(username)) { 
+        JOptionPane.showMessageDialog(RegistrationPage.this, "Username Already Exists", "Used Username", JOptionPane.ERROR_MESSAGE);
+    } else if (!password.equals(password2)) {
+        JOptionPane.showMessageDialog(RegistrationPage.this, "Passwords Do Not Match", "Retry", JOptionPane.ERROR_MESSAGE);
+    } else {
+        int id = Customer.newid(); // Assuming Customer.newid() generates a new id
+        JOptionPane.showMessageDialog(null, id);
+        // Directly constructing the SQL string with concatenation
+        String sql = "INSERT INTO Customer (id, username, password) VALUES ('" + id + "', '" + username + "', '" + password + "')";
+
+        try (Connection connection = DriverManager.getConnection(url);
+             Statement stmt = connection.createStatement()) {
+
+            int rowsInserted = stmt.executeUpdate(sql);
+            if (rowsInserted > 0) {
+                JOptionPane.showMessageDialog(RegistrationPage.this, "Account Registered Successfully.", "Welcome", JOptionPane.INFORMATION_MESSAGE);
+                RegistrationPage.this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(RegistrationPage.this, "Registration Failed. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(RegistrationPage.this, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }
+}
+
+
 
     //for test
     public static void main(String[] args) {
