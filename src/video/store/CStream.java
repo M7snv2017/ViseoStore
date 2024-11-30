@@ -10,6 +10,7 @@ package video.store;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import main.SharedSources.MenuPanel;
@@ -28,10 +29,18 @@ public class CStream extends JFrame implements ActionListener {
     PurchasesPage purchases;
     AccountPage account;
     
+    //database
+    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559";
+    String username = "sql12747559";
+    String password = "zdI3qyjlca";
+    String sql ="select * from Video";
+    Connection connection = null;
+    
+    
+    
     public CStream() {
         super("Test");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(800,500);
         this.setLocationRelativeTo(null);
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -49,7 +58,9 @@ public class CStream extends JFrame implements ActionListener {
         fv = new ArrayList<>();
         ca = new ArrayList<>();
         pu = new ArrayList<>();
-
+        
+        
+        databaseCon();
         main = new Main(av);
         favorites = new Favorites(fv);
         cart = new CartPage(ca);
@@ -78,6 +89,8 @@ public class CStream extends JFrame implements ActionListener {
 
         pack();
         this.setVisible(true);
+        this.setSize(800,500);
+
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -91,7 +104,37 @@ public class CStream extends JFrame implements ActionListener {
         }
         repaint();
     }
+    
+    public void databaseCon() {
+    try (Connection connection = DriverManager.getConnection(url, username, password);
+         Statement statement = connection.createStatement();
+         ResultSet resultSet = statement.executeQuery(sql)) {
+        
+        av.clear();
+        
+        while (resultSet.next()) {
+            av.add(new Video(
+                    resultSet.getInt("id"),
+                    resultSet.getInt("purchaseFrequency"),
+                    resultSet.getInt("price"),
+                    resultSet.getString("title"),
+                    resultSet.getString("director"), 
+                    resultSet.getString("synopsis"),
+                    resultSet.getString("agegroup"),
+                    resultSet.getString("genre"),
+                    resultSet.getString("videoSource"),
+                    resultSet.getString("year"),
+                    new ImageIcon(resultSet.getString("imagepath"))));
+            
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error occurred while fetching data: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
 
+    
     public static void main (String []args) {
         CStream frm = new CStream();
     }

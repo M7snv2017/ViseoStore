@@ -19,6 +19,20 @@ public class Video {
     public Video() {
     }
 
+    public Video(int id, int purchaseFrequency, int price, String title, String director, String synopsis, String ageGroup, String genre, String videoSource, String year, ImageIcon image) {
+        this.id = id;
+        this.purchaseFrequency = purchaseFrequency;
+        this.price = price;
+        this.title = title;
+        this.director = director;
+        this.synopsis = synopsis;
+        this.ageGroup = ageGroup;
+        this.genre = genre;
+        this.videoSource = videoSource;
+        this.year = year;
+        this.image = image;
+    }
+    
     public Video(int id, int purchaseFrequency, int price, String ageGroup, String genre, String videoSource, ImageIcon image) {
         this.id = id;
         this.purchaseFrequency = purchaseFrequency;
