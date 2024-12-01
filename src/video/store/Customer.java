@@ -6,12 +6,15 @@ import java.sql.*;
  * @author M7sn9
  */
 public class Customer {
-    private int customerId;
+    public int customerId;
     private String customerUserName;
     private String customerPassword;
     private String cudtomerPhoneNumber;
 
+    public Customer() {
+    }
 
+    
     public Customer(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber) {
         this.customerId = customerId;
         this.customerUserName = customerUserName;

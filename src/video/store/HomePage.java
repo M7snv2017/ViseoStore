@@ -24,7 +24,7 @@ public class HomePage extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    LoginPage login = new LoginPage();
+                    LoginPage login = new LoginPage(HomePage.this);
                     login.setVisible(true);
                 }
             }
@@ -62,7 +62,7 @@ public class HomePage extends JFrame {
         loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createRigidArea(new Dimension(0, 30)));
         loginButton.addActionListener((ActionEvent e) -> {
-            LoginPage login = new LoginPage();
+            LoginPage login = new LoginPage(HomePage.this);
             login.setVisible(true);
         });
         panel.add(loginButton);
@@ -72,7 +72,7 @@ public class HomePage extends JFrame {
         registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createRigidArea(new Dimension(0, 5)));
         registerButton.addActionListener((ActionEvent e) -> {
-            RegistrationPage register = new RegistrationPage();
+            RegistrationPage register = new RegistrationPage(HomePage.this);
             register.setVisible(true);
         });
         panel.add(registerButton);

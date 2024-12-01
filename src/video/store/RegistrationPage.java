@@ -27,8 +27,15 @@ String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12
 
     static JButton registerBtn = new JButton("Register");
     static JButton cancelBtn = new JButton("Cancel");
-
-    public RegistrationPage() {
+    
+    HomePage hp;
+    CStream main;
+    
+    public RegistrationPage(HomePage hp) {
+        
+        this.hp=hp;
+        
+        
         this.setTitle("RegistrationPage");
         this.setSize(400, 250);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -108,36 +115,7 @@ String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12
         this.setVisible(true);
     
     }
-//    public void validateLogin(String enteredUsername, String enteredPassword) {
-//    String sqlCheckUser = "SELECT password FROM customer WHERE username = ?";
-//
-//    try (Connection connection = DriverManager.getConnection(url, username, password);
-//         PreparedStatement stmt = connection.prepareStatement(sqlCheckUser)) {
-//
-//        // Set the username parameter in the query
-//        stmt.setString(1, enteredUsername);
-//
-//        // Execute the query
-//        try (ResultSet rs = stmt.executeQuery()) {
-//            if (rs.next()) {
-//                // Username exists, check the password
-//                String storedPassword = rs.getString("password");
-//                if (storedPassword.equals(enteredPassword)) {
-//                    JOptionPane.showMessageDialog(null, "Login Successful", "Welcome", JOptionPane.INFORMATION_MESSAGE);
-//                } else {
-//                    JOptionPane.showMessageDialog(null, "Incorrect Password", "Retry", JOptionPane.ERROR_MESSAGE);
-//                }
-//            } else {
-//                // Username does not exist
-//                JOptionPane.showMessageDialog(null, "Username does not exist", "Retry", JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
-//
-//    } catch (SQLException e) {
-//        JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-//        e.printStackTrace();
-//    }
-//}
+
     public boolean exist(String username) {
        String sql = "SELECT COUNT(*) AS exist FROM Customer WHERE username = '" + username + "'";
 
@@ -171,7 +149,7 @@ String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12
         JOptionPane.showMessageDialog(RegistrationPage.this, "Passwords Do Not Match", "Retry", JOptionPane.ERROR_MESSAGE);
     } else {
         int id = Customer.newid(); // Assuming Customer.newid() generates a new id
-        JOptionPane.showMessageDialog(null, id);
+        System.out.println(id);
         // Directly constructing the SQL string with concatenation
         String sql = "INSERT INTO Customer (id, username, password) VALUES ('" + id + "', '" + username + "', '" + password + "')";
 
@@ -182,6 +160,11 @@ String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(RegistrationPage.this, "Account Registered Successfully.", "Welcome", JOptionPane.INFORMATION_MESSAGE);
                 RegistrationPage.this.dispose();
+                hp.dispose();
+                Customer c = new Customer();
+                c.customerId=id;
+                main = new CStream(c);
+                main.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(RegistrationPage.this, "Registration Failed. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -196,6 +179,6 @@ String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12
 
     //for test
     public static void main(String[] args) {
-        RegistrationPage frm = new RegistrationPage();
+        RegistrationPage frm = new RegistrationPage(null);
     }
 }

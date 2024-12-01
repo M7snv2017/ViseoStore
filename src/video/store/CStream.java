@@ -32,14 +32,16 @@ public class CStream extends JFrame implements ActionListener {
     String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";
     
     
+    Customer c;
     
-    
-    public CStream(Customer customer) {
+    public CStream(Customer c) {
         super("Test");
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
+        
+        this.c=c;
         
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.anchor = GridBagConstraints.WEST;
@@ -60,7 +62,7 @@ public class CStream extends JFrame implements ActionListener {
         favorites = new Favorites(fv);
         cart = new CartPage(ca);
         purchases = new PurchasesPage(pu);
-        account = new AccountPage(customer);
+        account = new AccountPage(c);
     
         cardLayout = new CardLayout();
         container = new JPanel(cardLayout);
@@ -82,7 +84,7 @@ public class CStream extends JFrame implements ActionListener {
         cardLayout.show(container, "Main");    
 
         pack();
-        this.setVisible(true);
+        this.setVisible(false);
         this.setSize(800,500);
 
     }
@@ -103,11 +105,11 @@ public class CStream extends JFrame implements ActionListener {
     
 
     public void databaseCon() {
-    int customerId = 1;
-
+    int customerId = c.customerId;
+    System.out.println(customerId);
     String sqlAllVideos = "SELECT * FROM Video";
-    String sqlFavoriteVideos = "SELECT * FROM Video WHERE id IN (SELECT videoid FROM Favorite WHERE customerid = ?)";
-    String sqlPurchasedVideos = "SELECT * FROM Video WHERE id IN (SELECT videoid FROM Orders WHERE customerid = ?)";
+    String sqlFavoriteVideos = "SELECT * FROM Video WHERE id IN (SELECT videoid FROM Favorite WHERE customerid = "+customerId+")";
+    String sqlPurchasedVideos = "SELECT * FROM Video WHERE id IN (SELECT videoid FROM Orders WHERE customerid = "+customerId+")";
 
     try (Connection connection = DriverManager.getConnection(url)) {
         av.clear();
@@ -140,7 +142,6 @@ public class CStream extends JFrame implements ActionListener {
 
         // Fetch favorite videos
         try (PreparedStatement stmt = connection.prepareStatement(sqlFavoriteVideos)) {
-            stmt.setInt(1, customerId); // Set customer ID
             try (ResultSet resultSet = stmt.executeQuery()) {
                 while (resultSet.next()) {
                     fv.add(new Video(
@@ -163,7 +164,6 @@ public class CStream extends JFrame implements ActionListener {
 
         // Fetch purchased videos
         try (PreparedStatement stmt = connection.prepareStatement(sqlPurchasedVideos)) {
-            stmt.setInt(1, customerId); // Set customer ID
             try (ResultSet resultSet = stmt.executeQuery()) {
                 while (resultSet.next()) {
                     pu.add(new Video(
@@ -184,9 +184,9 @@ public class CStream extends JFrame implements ActionListener {
             }
         }
 
-        JOptionPane.showMessageDialog(null, "Data fetched successfully!");
+        //JOptionPane.showMessageDialog(null, "Data fetched successfully!");
     } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Error occurred while fetching data: " + e.getMessage());
+        //JOptionPane.showMessageDialog(null, "Error occurred while fetching data: " + e.getMessage());
         e.printStackTrace();
     }
 }
@@ -196,81 +196,3 @@ public class CStream extends JFrame implements ActionListener {
         CStream frm = new CStream(null);
     }
 }
-//    public void databaseCon() {
-//        String sql ="select * from Video;";
-//    try (Connection connection = DriverManager.getConnection(url, username, password);
-//    {    
-//        Statement statement = connection.createStatement();
-//
-//
-//        ResultSet resultSet = statement.executeQuery(sql)) 
-//        {
-//
-//            av.clear();
-//
-//            while (resultSet.next()) 
-//            {
-//                av.add(new Video(
-//                        resultSet.getInt("id"),
-//                        resultSet.getInt("purchaseFrequency"),
-//                        resultSet.getInt("price"),
-//                        resultSet.getString("title"),
-//                        resultSet.getString("director"), 
-//                        resultSet.getString("synopsis"),
-//                        resultSet.getString("agegroup"),
-//                        resultSet.getString("genre"),
-//                        resultSet.getString("videoSource"),
-//                        resultSet.getString("year"),
-//                        new ImageIcon(resultSet.getString("imagepath"))));
-//            }
-//        }
-//        int id=1;
-//        sql="select* from Video where id=(select videoid from favorite where customerid="+id+");";
-//        ResultSet resultSet = statement.executeQuery(sql))
-//        {
-//            fv.clear();
-//            while (resultSet.next()) 
-//            {
-//                
-//                fv.add(new Video(
-//                        resultSet.getInt("id"),
-//                        resultSet.getInt("purchaseFrequency"),
-//                        resultSet.getInt("price"),
-//                        resultSet.getString("title"),
-//                        resultSet.getString("director"), 
-//                        resultSet.getString("synopsis"),
-//                        resultSet.getString("agegroup"),
-//                        resultSet.getString("genre"),
-//                        resultSet.getString("videoSource"),
-//                        resultSet.getString("year"),
-//                        new ImageIcon(resultSet.getString("imagepath"))));
-//            }    
-//        }
-//        int id=1;
-//        sql="select* from Video where id=(select videoid from Orders where customerid="+id+");";
-//        ResultSet resultSet = statement.executeQuery(sql))
-//        {
-//            pu.clear();
-//            while (resultSet.next()) 
-//            {
-//                pu.add(new Video(
-//                        resultSet.getInt("id"),
-//                        resultSet.getInt("purchaseFrequency"),
-//                        resultSet.getInt("price"),
-//                        resultSet.getString("title"),
-//                        resultSet.getString("director"), 
-//                        resultSet.getString("synopsis"),
-//                        resultSet.getString("agegroup"),
-//                        resultSet.getString("genre"),
-//                        resultSet.getString("videoSource"),
-//                        resultSet.getString("year"),
-//                        new ImageIcon(resultSet.getString("imagepath"))));
-//            }    
-//        }
-//    } 
-//    catch (SQLException e) 
-//    {
-//    JOptionPane.showMessageDialog(null, "Error occurred while fetching data: " + e.getMessage());
-//    e.printStackTrace();
-//    }
-//}

@@ -25,8 +25,12 @@ public class LoginPage extends JFrame {
 
     static JButton loginBtn = new JButton("Login");
     static JButton cancelBtn = new JButton("Cancel");
+    
     CStream main;
-    public LoginPage() {
+    HomePage hp;
+    public LoginPage(HomePage hp) 
+    {
+        this.hp=hp;
         
         loginBtn.addActionListener((ActionEvent e) -> {
             performLogin();
@@ -99,8 +103,50 @@ public class LoginPage extends JFrame {
 
         this.setVisible(true);
     }
-    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559";
-   
+    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";   
+    
+    public boolean exist(String username, String password) {
+    String sql = "SELECT COUNT(*) AS exist FROM Customer WHERE username = '" 
+                 + username + "' AND password = '" 
+                 + password + "'";
+
+    try (Connection connection = DriverManager.getConnection(url);
+         Statement stmt = connection.createStatement()) {
+        
+        try (ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) {
+                return rs.getInt("exist") > 0; // Check if the combination exists
+            }
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        e.printStackTrace();
+    }
+    return false;
+}
+
+    private int getId(String username) {
+        String sql = "SELECT id FROM Customer WHERE username = ?";
+        int id = -1;
+
+        try (Connection connection = DriverManager.getConnection(url);
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getInt("id");
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+
+        return id;
+    }
+
     private void performLogin() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
@@ -108,19 +154,28 @@ public class LoginPage extends JFrame {
         // Simple validation 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(LoginPage.this, "Username or Password cannot be empty!", "Retry", JOptionPane.WARNING_MESSAGE);
-        } else if (!username.equals("admin") || !password.equals("password")) {
+        } else if (!exist(username,password)) {
             JOptionPane.showMessageDialog(LoginPage.this, "Invalid Username or Password!", "Invalid Information", JOptionPane.WARNING_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(LoginPage.this, "Welcome " + username, "Logged In", JOptionPane.INFORMATION_MESSAGE);
-            for (Window window : Window.getWindows()) {
-                window.dispose();
-            }
-            Customer c= new Customer(1, "", password, username);
+        } else if(exist(username,password)){
+//            System.gc();
+//            for (Window window : Window.getWindows()) {
+//                window.dispose();
+//                System.out.println("1disposed");
+//            }
+            //JOptionPane.showMessageDialog(LoginPage.this, "Welcome " + username, "Logged In", JOptionPane.INFORMATION_MESSAGE);
+//            for (Window window : Window.getWindows()) {
+//                window.dispose();
+//                System.out.println("2disposed");
+//
+//            }
+            Customer c= new Customer();
+            c.customerId=getId(username);
             main = new CStream(c);
             main.setVisible(true);
-            System.gc();for (Window window : Window.getWindows()) {
-                window.dispose();
-            }
+            hp.dispose();
+            this.dispose();
+            
+            
         }
     }
 }
