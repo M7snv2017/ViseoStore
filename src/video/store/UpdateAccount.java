@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.sql.*;
 import javax.swing.*;
 import main.SharedSources.Util;
 import main.SharedSources.Util.placeHolderListener;
@@ -30,7 +31,7 @@ public class UpdateAccount extends JFrame implements ActionListener {
     public UpdateAccount(int id) {
         
         customer_id = id;
-        
+        JOptionPane.showMessageDialog(null, "Here");
         this.setTitle("Update Information");
         this.setSize(400, 250);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -91,21 +92,47 @@ public class UpdateAccount extends JFrame implements ActionListener {
 
         this.setVisible(true);
     }
+    
+    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";
 
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == updateBtn) {
+         JOptionPane.showMessageDialog(null, "Update Successfully.hi"+customer_id, "Info", JOptionPane.INFORMATION_MESSAGE);
+
             String uName = username.getText();
-            String pass = password.getText();
-            JOptionPane.showMessageDialog(null, " Information Updated Successfully.");
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            String pass =new String( password.getPassword());
+            System.out.println(uName+"\n"+pass);
+            //
+            String sql = "UPDATE Customer SET username = '" + uName + "', password = '" + pass + "' WHERE id = " + customer_id;
+            
+
+        try (Connection connection = DriverManager.getConnection(url);
+             Statement stmt = connection.createStatement()) {
+
+            int rowsInserted = stmt.executeUpdate(sql);
+            if (rowsInserted > 0) {
+                Customer c = new Customer();
+                JOptionPane.showMessageDialog(null, "Update Successfully.hi"+customer_id, "Info", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Update Failed. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            ex.printStackTrace();
+        }
+            //
+//            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            this.dispose();
         }
 
         if (e.getSource() == cancelBtn) {
-            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+//            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            this.dispose();
         }
     }
-
     //for test
     public static void main(String[] args) {
         UpdateAccount frm = new UpdateAccount(1);

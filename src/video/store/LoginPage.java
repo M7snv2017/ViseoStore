@@ -126,13 +126,12 @@ public class LoginPage extends JFrame {
 }
 
     private int getId(String username) {
-        String sql = "SELECT id FROM Customer WHERE username = ?";
+        String sql = "SELECT id FROM Customer WHERE username = "+username;
         int id = -1;
 
         try (Connection connection = DriverManager.getConnection(url);
              PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
-            pstmt.setString(1, username);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
