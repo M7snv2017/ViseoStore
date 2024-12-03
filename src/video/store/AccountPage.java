@@ -111,7 +111,7 @@ public class AccountPage extends JPanel
             @Override
             public void actionPerformed(ActionEvent e) 
             {
-                //updateAccount = new UpdateAccount(c.customerId);
+                updateAccount = new UpdateAccount(c.customerId);
             }
         });
         infoPanel.add(updateButton,gbc);

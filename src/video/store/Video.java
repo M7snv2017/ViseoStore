@@ -4,8 +4,8 @@ import javax.swing.ImageIcon;
 
 public class Video  {
 
-    private int id, //(Mustafa) for ID, a value must be automatically assigned, using sequence for example.
-            purchaseFrequency, //(Mustafa) Rate replaced. Rating seems to be complext.
+    public int id; //(Mustafa) for ID, a value must be automatically assigned, using sequence for example.
+    private int purchaseFrequency, //(Mustafa) Rate replaced. Rating seems to be complext.
             price;
     private String title,
             director,
@@ -16,7 +16,10 @@ public class Video  {
             year;
     private ImageIcon image;
     CartPage cart;
-    public Video() {
+    public boolean FavoriteFlag;
+    public Video() 
+    {
+        
     }
 
     public Video(int id, int purchaseFrequency, int price, String title, String director, String synopsis, String ageGroup, String genre, String videoSource, String year, ImageIcon image,CartPage cart) {
@@ -32,6 +35,7 @@ public class Video  {
         this.year = year;
         this.image = image;
         this.cart=cart;
+        this.FavoriteFlag=false;
     }
     
     public Video(int id, int purchaseFrequency, int price, String ageGroup, String genre, String videoSource, ImageIcon image) {

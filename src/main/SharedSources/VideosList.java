@@ -15,12 +15,20 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import video.store.Video;
-import video.store.VideoInfoFrame;
+import video.store.*;
 
 public class VideosList extends JPanel {
 
-    public VideosList(ArrayList<Video> vl) {  //vl: videos list
+    
+    Favorites fav;
+    public VideosList(ArrayList<Video> vl,Favorites f)
+    {
+        fav=f;
+        initialize(vl);
+    }
+    CStream s;
+    public VideosList(ArrayList<Video> vl,CStream s) {  //vl: videos list
+        this.s=s;
         initialize(vl);
     }
 
@@ -41,6 +49,9 @@ public class VideosList extends JPanel {
     }
 
     private JPanel addVideo(Video video, int i) {
+        
+        
+        
         JPanel panel = new JPanel();
         panel.setSize(570, 50);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -63,7 +74,7 @@ public class VideosList extends JPanel {
         JToggleButton toCart = new JToggleButton();
         toCart.setFocusPainted(false);
         try {
-            ImageIcon cart = new ImageIcon("src\\resources\\images\\cart.png");
+            ImageIcon cart = new ImageIcon("src\\resources\\images\\noCart.png");
 
             Image image = cart.getImage();
             Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -76,15 +87,18 @@ public class VideosList extends JPanel {
 
         toCart.addItemListener((ItemEvent i1) -> {
             int state = i1.getStateChange();
-            if (state == ItemEvent.SELECTED) {
+            if (state != ItemEvent.SELECTED) {
                 try {
                     ImageIcon noCart = new ImageIcon("src\\resources\\images\\noCart.png");
                     
                     Image image = noCart.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     noCart = new ImageIcon(newimg);
-                    
                     toCart.setIcon(noCart);
+                    CStream.ca.remove(video);
+                    s.container.repaint();
+                    video.FavoriteFlag=false;
+                    System.out.println("cart "+video.id+" : "+video.FavoriteFlag);
                 } catch (Exception e) {
                     toCart.setText("Remove from Cart");
                 }
@@ -95,8 +109,11 @@ public class VideosList extends JPanel {
                     Image image = cart.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     cart = new ImageIcon(newimg);
-                    
                     toCart.setIcon(cart);
+                    CStream.ca.add(video);
+                    s.container.repaint();
+                    video.FavoriteFlag=true;
+                    System.out.println("cart "+video.id+" : "+video.FavoriteFlag);
                 } catch (Exception e) {
                     toCart.setText("Add to Cart");
                 }
@@ -107,8 +124,11 @@ public class VideosList extends JPanel {
         JToggleButton toFavorite = new JToggleButton();
         toFavorite.setFocusPainted(false);
         try {
-            ImageIcon favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
-
+            ImageIcon favorite;
+            if(video.FavoriteFlag)
+                 favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
+            else
+                 favorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
             Image image = favorite.getImage();
             Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             favorite = new ImageIcon(newimg);
@@ -119,16 +139,29 @@ public class VideosList extends JPanel {
         }
 
         toFavorite.addItemListener((ItemEvent i2) -> {
+            
             int state = i2.getStateChange();
-            if (state == ItemEvent.SELECTED) {
+            if (state != ItemEvent.SELECTED) {
                 try {
                     ImageIcon noFavorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
                     
                     Image image = noFavorite.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     noFavorite = new ImageIcon(newimg);
-                    
                     toFavorite.setIcon(noFavorite);
+                    
+                    CStream.fv.remove(video);
+                    
+                    for (var s : CStream.fv)
+                    {
+                        System.out.println(s.id);
+                    }
+                    s.container.repaint();
+                    video.FavoriteFlag=false;
+                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
+                    if(fav!=null)
+                        fav.change(CStream.fv);
+                    s.favorites= new Favorites(CStream.fv, s);
                 } catch (Exception e) {
                     toFavorite.setText("Remove from Favorite");
                 }
@@ -139,8 +172,20 @@ public class VideosList extends JPanel {
                     Image image = favorite.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     favorite = new ImageIcon(newimg);
-                    
                     toFavorite.setIcon(favorite);
+                    
+                    CStream.fv.add(video);
+                    
+                    initialize(CStream.fv);
+                    for (var s : CStream.fv)
+                    {
+                        System.out.println(s.id);
+                    }
+                    s.container.repaint();
+                    video.FavoriteFlag=true;
+                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
+                    if(fav!=null)
+                        fav.change(CStream.fv);
                 } catch (Exception e) {
                     toFavorite.setText("Add to Favorite");
                 }

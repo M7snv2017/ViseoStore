@@ -3,7 +3,7 @@ package video.store;
 /**
  * This is the container page of our project. HERE IS WHERE ALL THE BEAUTY STARTS
  * IT IS NOT COMPLETE, WAITING TO OTHER PARTS OF THE PROJECT TO BE READY.
- * @author Mustafa
+ * @author Mustafa 
  */
 
 import java.awt.*;
@@ -15,15 +15,16 @@ import javax.swing.*;
 import main.SharedSources.MenuPanel;
 
 public class CStream extends JFrame implements ActionListener {
-    private final CardLayout cardLayout;
-    private final JPanel container;
-    private ArrayList<Video> av;
-    private ArrayList<Video> fv;
-    private ArrayList<Video> ca;
-    private ArrayList<Video> pu;
+    public final CardLayout cardLayout;
+    public final JPanel container;
+    
+    public static ArrayList<Video> av;
+    public static ArrayList<Video> fv;
+    public static ArrayList<Video> ca;
+    public static ArrayList<Video> pu;
     MenuPanel menu = new MenuPanel(this);
     Main main;
-    Favorites favorites;
+    public Favorites favorites;
     CartPage cart;
     PurchasesPage purchases;
     AccountPage account;
@@ -58,10 +59,10 @@ public class CStream extends JFrame implements ActionListener {
         pu = new ArrayList<>();
         
         databaseCon();
-        main = new Main(av);
-        favorites = new Favorites(fv);
-        cart = new CartPage(ca);
-        purchases = new PurchasesPage(pu);
+        main = new Main(av,this);
+        favorites = new Favorites(fv,this);
+        cart = new CartPage(ca,this);
+        purchases = new PurchasesPage(pu,this);
         account = new AccountPage(c);
     
         cardLayout = new CardLayout();
@@ -115,7 +116,31 @@ public class CStream extends JFrame implements ActionListener {
         av.clear();
         fv.clear();
         pu.clear();
-
+        
+        
+        // Fetch favorite videos
+        try (PreparedStatement stmt = connection.prepareStatement(sqlFavoriteVideos)) {
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    Video v =new Video(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("purchaseFrequency"),
+                            resultSet.getInt("price"),
+                            resultSet.getString("title"),
+                            resultSet.getString("director"),
+                            resultSet.getString("synopsis"),
+                            resultSet.getString("agegroup"),
+                            resultSet.getString("genre"),
+                            resultSet.getString("videoSource"),
+                            resultSet.getString("year"),
+                            new ImageIcon(resultSet.getString("imagepath")),
+                            cart);
+                    v.FavoriteFlag=true;
+                    fv.add(v);
+                    
+                }
+            }
+        }
         // Fetch all videos
         try (PreparedStatement stmt = connection.prepareStatement(sqlAllVideos);
              ResultSet resultSet = stmt.executeQuery()) {
@@ -136,29 +161,21 @@ public class CStream extends JFrame implements ActionListener {
                         cart
                 );
                 
-                av.add(v);
-            }
-        }
-
-        // Fetch favorite videos
-        try (PreparedStatement stmt = connection.prepareStatement(sqlFavoriteVideos)) {
-            try (ResultSet resultSet = stmt.executeQuery()) {
-                while (resultSet.next()) {
-                    fv.add(new Video(
-                            resultSet.getInt("id"),
-                            resultSet.getInt("purchaseFrequency"),
-                            resultSet.getInt("price"),
-                            resultSet.getString("title"),
-                            resultSet.getString("director"),
-                            resultSet.getString("synopsis"),
-                            resultSet.getString("agegroup"),
-                            resultSet.getString("genre"),
-                            resultSet.getString("videoSource"),
-                            resultSet.getString("year"),
-                            new ImageIcon(resultSet.getString("imagepath")),
-                            cart
-                    ));
+                for(var vi : fv)
+                {
+                    if(vi.id==v.id)
+                    { 
+                        
+                        v.FavoriteFlag=true;
+                    }
                 }
+                    
+                System.out.println(v.FavoriteFlag);
+                av.add(v);
+                
+                
+//                    main.list.vl.get(i);
+//                    main.list.changeImg(0, main.list, i);  
             }
         }
 

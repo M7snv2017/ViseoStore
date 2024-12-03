@@ -14,11 +14,11 @@ import main.SharedSources.*;
 public class Favorites extends JPanel {
     SearchPanel search = new SearchPanel();
     VideosList list;
-
-    public Favorites(ArrayList<Video> favorites) {
+    CStream s;
+    public Favorites(ArrayList<Video> favorites,CStream s) {
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        
+        this.s=s;
         gbc.fill = GridBagConstraints.CENTER;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -45,23 +45,26 @@ public class Favorites extends JPanel {
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         gbc.weighty = 10.0;
-        list = new VideosList(favorites);
+        list = new VideosList(favorites, Favorites.this);
         JScrollPane favoritesScrollPane = new JScrollPane(list);
         this.add(favoritesScrollPane, gbc);   
     }
-
-    //for test
-    public static void main(String[] args) {
-        JFrame frm = new JFrame();
-
-        ArrayList<Video> arr = new ArrayList<>();
-        Main p = new Main(arr);
-
-        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frm.setSize(800, 500);
-        frm.setLocationRelativeTo(null);
-        frm.add(p);
-        frm.setVisible(true);   
+    public void change(ArrayList<Video> favorites)
+    {
+        list = new VideosList(favorites, s);
     }
+    //for test
+//    public static void main(String[] args) {
+//        JFrame frm = new JFrame();
+//
+//        ArrayList<Video> arr = new ArrayList<>();
+//        Main p = new Main(arr);
+//
+//        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        frm.setSize(800, 500);
+//        frm.setLocationRelativeTo(null);
+//        frm.add(p);
+//        frm.setVisible(true);   
+//    }
 }
 

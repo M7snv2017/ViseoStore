@@ -14,8 +14,9 @@ import javax.swing.border.TitledBorder;
 public class PurchasesPage extends JPanel {
 
     private ArrayList<Video> videos = new ArrayList();
-
-    public PurchasesPage(ArrayList<Video> video) {
+    CStream s;
+    public PurchasesPage(ArrayList<Video> video,CStream s) {
+        this.s=s;
         videos = video;
         initialize();
     }
@@ -84,21 +85,21 @@ public class PurchasesPage extends JPanel {
     }   
     
     //for test
-    public static void main(String[] args) {
-        JFrame frm = new JFrame();
-        ArrayList<Video> videos = new ArrayList();
-        Video video = new Video();
-        videos.add(video);
-        videos.add(video);
-        videos.add(video);
-        videos.add(video);
-        videos.add(video);
-        PurchasesPage p = new PurchasesPage(videos);
-
-        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frm.setSize(800, 500);
-        frm.setLocationRelativeTo(null);
-        frm.add(p);
-        frm.setVisible(true);
-    }
-    }
+//    public static void main(String[] args) {
+//        JFrame frm = new JFrame();
+//        ArrayList<Video> videos = new ArrayList();
+//        Video video = new Video();
+//        videos.add(video);
+//        videos.add(video);
+//        videos.add(video);
+//        videos.add(video);
+//        videos.add(video);
+//        PurchasesPage p = new PurchasesPage(videos);
+//
+//        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        frm.setSize(800, 500);
+//        frm.setLocationRelativeTo(null);
+//        frm.add(p);
+//        frm.setVisible(true);
+//    }
+}

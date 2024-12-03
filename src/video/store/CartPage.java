@@ -15,8 +15,9 @@ public class CartPage extends JPanel {
 
     private ArrayList<Video> videos = new ArrayList();
     private final double total = 0;
-
-    public CartPage(ArrayList<Video> video) {
+    CStream s;
+    public CartPage(ArrayList<Video> video,CStream s) {
+        this.s=s;
         videos = video;
         initialize();
     }
@@ -114,17 +115,17 @@ public class CartPage extends JPanel {
     }
 
     //For test
-    public static void main(String[] args) {
-        JFrame frm = new JFrame();
-        ArrayList<Video> videos = new ArrayList();
-        Video video = new Video();
-        
-        CartPage p = new CartPage(videos);
-
-        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frm.setSize(800, 500);
-        frm.setLocationRelativeTo(null);
-        frm.add(p);
-        frm.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        JFrame frm = new JFrame();
+//        ArrayList<Video> videos = new ArrayList();
+//        Video video = new Video();
+//        
+//        CartPage p = new CartPage(videos);
+//
+//        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        frm.setSize(800, 500);
+//        frm.setLocationRelativeTo(null);
+//        frm.add(p);
+//        frm.setVisible(true);
+//    }
 }
