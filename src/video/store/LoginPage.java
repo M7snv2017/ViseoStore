@@ -6,16 +6,17 @@ package video.store;
  *
  * @author Mustafa
  */
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.*;
 import java.sql.*;
+import javax.swing.*;
 import main.SharedSources.Util.placeHolderListener;
 
 public class LoginPage extends JFrame {
+
+    final String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";
 
     static JLabel usernameLbl = new JLabel("Username:");
     static JLabel passwordLbl = new JLabel("Password:");
@@ -25,13 +26,13 @@ public class LoginPage extends JFrame {
 
     static JButton loginBtn = new JButton("Login");
     static JButton cancelBtn = new JButton("Cancel");
-    
+
     CStream main;
     HomePage hp;
-    public LoginPage(HomePage hp) 
-    {
-        this.hp=hp;
-        
+
+    public LoginPage(HomePage hp) {
+        this.hp = hp;
+
         loginBtn.addActionListener((ActionEvent e) -> {
             performLogin();
         });
@@ -103,35 +104,32 @@ public class LoginPage extends JFrame {
 
         this.setVisible(true);
     }
-    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";   
-    
-    public boolean exist(String username, String password) {
-    String sql = "SELECT COUNT(*) AS exist FROM Customer WHERE username = '" 
-                 + username + "' AND password = '" 
-                 + password + "'";
 
-    try (Connection connection = DriverManager.getConnection(url);
-         Statement stmt = connection.createStatement()) {
-        
-        try (ResultSet rs = stmt.executeQuery(sql)) {
-            if (rs.next()) {
-                return rs.getInt("exist") > 0; // Check if the combination exists
+    public boolean exist(String username, String password) {
+        boolean userExists = false;
+        String sql = "SELECT COUNT(*) AS exist FROM Customer WHERE username = '"
+                + username + "' AND password = '"
+                + password + "'";
+
+        try (Connection connection = DriverManager.getConnection(url); Statement stmt = connection.createStatement()) {
+
+            try (ResultSet rs = stmt.executeQuery(sql)) {
+                if (rs.next()) {
+                    userExists = rs.getInt("exist") > 0; // Check if the combination exists
+                }
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null, "Database Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
+        return userExists;
     }
-    return false;
-}
 
     private int getId(String username) {
-        String sql = "SELECT id FROM Customer WHERE username = "+username;
         int id = -1;
+        String sql = "SELECT id FROM Customer WHERE username = '" + username + "'";
 
-        try (Connection connection = DriverManager.getConnection(url);
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
+        try (Connection connection = DriverManager.getConnection(url); PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -153,28 +151,18 @@ public class LoginPage extends JFrame {
         // Simple validation 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(LoginPage.this, "Username or Password cannot be empty!", "Retry", JOptionPane.WARNING_MESSAGE);
-        } else if (!exist(username,password)) {
-            JOptionPane.showMessageDialog(LoginPage.this, "Invalid Username or Password!", "Invalid Information", JOptionPane.WARNING_MESSAGE);
-        } else if(exist(username,password)){
-//            System.gc();
-//            for (Window window : Window.getWindows()) {
-//                window.dispose();
-//                System.out.println("1disposed");
-//            }
-            //JOptionPane.showMessageDialog(LoginPage.this, "Welcome " + username, "Logged In", JOptionPane.INFORMATION_MESSAGE);
-//            for (Window window : Window.getWindows()) {
-//                window.dispose();
-//                System.out.println("2disposed");
-//
-//            }
-            Customer c= new Customer();
-            c.customerId=getId(username);
-            main = new CStream(c);
-            main.setVisible(true);
-            hp.dispose();
-            this.dispose();
-            
-            
+        } else {
+            boolean userExists = exist(username, password);
+            if (!userExists) {
+                JOptionPane.showMessageDialog(LoginPage.this, "Invalid Username or Password!", "Invalid Information", JOptionPane.WARNING_MESSAGE);
+            } else {
+                Customer c = new Customer();
+                c.customerId = getId(username);
+                main = new CStream(c);
+                main.setVisible(true);
+                hp.dispose();
+                this.dispose();
+            }
         }
     }
 }

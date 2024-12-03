@@ -37,7 +37,8 @@ public class CStream extends JFrame implements ActionListener {
     
     public CStream(Customer c) {
         super("Test");
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setPreferredSize(new Dimension(800,500));
         this.setLocationRelativeTo(null);
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -85,9 +86,7 @@ public class CStream extends JFrame implements ActionListener {
         cardLayout.show(container, "Main");    
 
         pack();
-        this.setVisible(false);
-        this.setSize(800,500);
-
+        //this.setVisible(false);
     }
     @Override
     public void actionPerformed(ActionEvent e) 
@@ -103,6 +102,7 @@ public class CStream extends JFrame implements ActionListener {
         }
         repaint();
     }
+    
     
 
     public void databaseCon() {
