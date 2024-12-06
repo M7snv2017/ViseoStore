@@ -163,6 +163,8 @@ String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12
                 hp.dispose();
                 Customer c = new Customer();
                 c.customerId=id;
+                c.customerPassword=password;
+                c.customerUserName=username;
                 main = new CStream(c);
                 main.setVisible(true);
             } else {

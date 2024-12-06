@@ -7,19 +7,17 @@ import java.sql.*;
  */
 public class Customer {
     public int customerId;
-    private String customerUserName;
-    private String customerPassword;
-    private String cudtomerPhoneNumber;
+    public String customerUserName;
+    public String customerPassword;
 
     public Customer() {
     }
 
     
-    public Customer(int customerId, String customerUserName, String customerPassword, String cudtomerPhoneNumber) {
+    public Customer(int customerId, String customerUserName, String customerPassword) {
         this.customerId = customerId;
         this.customerUserName = customerUserName;
         this.customerPassword = customerPassword;
-        this.cudtomerPhoneNumber = cudtomerPhoneNumber;
     }
 
     public static int newid() {

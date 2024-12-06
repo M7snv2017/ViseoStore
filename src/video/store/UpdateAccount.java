@@ -27,10 +27,12 @@ public class UpdateAccount extends JFrame implements ActionListener {
 
     static JButton updateBtn = new JButton("Update");
     static JButton cancelBtn = new JButton("Cancel");
-
-    public UpdateAccount(int id) {
+    
+    AccountPage a;
+    Customer c;
+    public UpdateAccount(Customer c,AccountPage a) {
         
-        customer_id = id;
+        customer_id = c.customerId;
         JOptionPane.showMessageDialog(null, "Here");
         this.setTitle("Update Information");
         this.setSize(400, 250);
@@ -49,7 +51,7 @@ public class UpdateAccount extends JFrame implements ActionListener {
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        username.setText("Enter New Username");
+        username.setText(c.customerUserName);
         username.addFocusListener(new placeHolderListener());
         this.add(username, gbc);
 
@@ -60,7 +62,8 @@ public class UpdateAccount extends JFrame implements ActionListener {
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        password.setText("Enter New Password");
+        password.setText(c.customerPassword);
+        password.setEchoChar((char) 0);
         password.addFocusListener(new placeHolderListener());
         this.add(password, gbc);
 
@@ -91,6 +94,9 @@ public class UpdateAccount extends JFrame implements ActionListener {
         this.add(cancelBtn, gbc);
 
         this.setVisible(true);
+        
+        this.a=a;
+        this.c=c;
     }
     
     String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";
@@ -132,10 +138,13 @@ public class UpdateAccount extends JFrame implements ActionListener {
 //            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             this.dispose();
         }
+        
+        a.c=c;
+        a.refresh(c);
     }
     //for test
-    public static void main(String[] args) {
-        UpdateAccount frm = new UpdateAccount(1);
-    }
+//    public static void main(String[] args) {
+//        UpdateAccount frm = new UpdateAccount(1);
+//    }
 }
 

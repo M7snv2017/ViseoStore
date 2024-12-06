@@ -158,6 +158,8 @@ public class LoginPage extends JFrame {
             } else {
                 Customer c = new Customer();
                 c.customerId = getId(username);
+                c.customerUserName=username;
+                c.customerPassword=password;
                 main = new CStream(c);
                 main.setVisible(true);
                 hp.dispose();
