@@ -15,6 +15,7 @@ public class Favorites extends JPanel {
     SearchPanel search = new SearchPanel();
     VideosList list;
     CStream s;
+    Container c;
     public Favorites(ArrayList<Video> favorites,CStream s) {
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -45,14 +46,54 @@ public class Favorites extends JPanel {
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         gbc.weighty = 10.0;
-        list = new VideosList(favorites, Favorites.this);
+        list = new VideosList(favorites, s,Favorites.this);
         JScrollPane favoritesScrollPane = new JScrollPane(list);
+        favoritesScrollPane.getVerticalScrollBar().setUnitIncrement(16);
         this.add(favoritesScrollPane, gbc);   
     }
     public void change(ArrayList<Video> favorites)
     {
-        list = new VideosList(favorites, s);
+        list = new VideosList(favorites, s,Favorites.this);
     }
+    
+    public void refresh() {
+    removeAll();
+    revalidate();
+    repaint();
+
+    GridBagConstraints gbc = new GridBagConstraints();
+
+    gbc.fill = GridBagConstraints.CENTER;
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.weightx = 0.1;
+    gbc.weighty = 0.1;
+    JLabel lbl = new JLabel("Favorites Page");
+    lbl.setFont(new Font("Arial", Font.BOLD, 16));
+    add(lbl, gbc);
+
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.anchor = GridBagConstraints.NORTH;
+    gbc.insets = new Insets(20, 0, 0, 0);
+    gbc.gridheight = 1;
+    gbc.gridx = 0;
+    gbc.gridy = 1;
+    gbc.weightx = 0.4;
+    gbc.weighty = 2.0;
+    add(search, gbc);
+
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.anchor = GridBagConstraints.CENTER;
+    gbc.gridx = 0;
+    gbc.gridy = 2;
+    gbc.weightx = 1.0;
+    gbc.weighty = 10.0;
+    list = new VideosList(CStream.fv, s, this);
+    JScrollPane favoritesScrollPane = new JScrollPane(list);
+    favoritesScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+    add(favoritesScrollPane, gbc);
+}
+    
     //for test
 //    public static void main(String[] args) {
 //        JFrame frm = new JFrame();

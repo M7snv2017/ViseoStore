@@ -49,6 +49,7 @@ public class PurchasesPage extends JPanel {
         }
 
         JScrollPane purchJScrollPane = new JScrollPane(purchases);
+        purchJScrollPane.getVerticalScrollBar().setUnitIncrement(16);
         this.add(purchJScrollPane, BorderLayout.CENTER);
     }
 

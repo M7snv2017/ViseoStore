@@ -25,7 +25,7 @@ public class CStream extends JFrame implements ActionListener {
     MenuPanel menu = new MenuPanel(this);
     Main main;
     public Favorites favorites;
-    CartPage cart;
+    public CartPage cart;
     PurchasesPage purchases;
     AccountPage account;
     
@@ -86,7 +86,7 @@ public class CStream extends JFrame implements ActionListener {
         cardLayout.show(container, "Main");    
 
         pack();
-        //this.setVisible(false);
+        
     }
     @Override
     public void actionPerformed(ActionEvent e) 
@@ -95,11 +95,15 @@ public class CStream extends JFrame implements ActionListener {
         switch (command) 
         {
             case "Main" -> cardLayout.show(container, "Main");
-            case "Favorite" -> cardLayout.show(container, "Favorite");
+            case "Favorite" -> {
+                favorites.refresh();
+                cardLayout.show(container, "Favorite");
+            }
             case "Cart" -> cardLayout.show(container, "Cart");
             case "Purchases" -> cardLayout.show(container, "Purchases");
             case "Account" -> cardLayout.show(container, "Account");
         }
+        revalidate();
         repaint();
     }
     
@@ -113,11 +117,6 @@ public class CStream extends JFrame implements ActionListener {
     String sqlPurchasedVideos = "SELECT * FROM Video WHERE id IN (SELECT videoid FROM Orders WHERE customerid = "+customerId+")";
 
     try (Connection connection = DriverManager.getConnection(url)) {
-        av.clear();
-        fv.clear();
-        pu.clear();
-        
-        
         // Fetch favorite videos
         try (PreparedStatement stmt = connection.prepareStatement(sqlFavoriteVideos)) {
             try (ResultSet resultSet = stmt.executeQuery()) {
@@ -137,7 +136,6 @@ public class CStream extends JFrame implements ActionListener {
                             cart);
                     v.FavoriteFlag=true;
                     fv.add(v);
-                    
                 }
             }
         }
@@ -165,20 +163,16 @@ public class CStream extends JFrame implements ActionListener {
                 {
                     if(vi.id==v.id)
                     { 
-                        
                         v.FavoriteFlag=true;
                     }
                 }
                     
                 System.out.println(v.FavoriteFlag);
                 av.add(v);
-                
-                
 //                    main.list.vl.get(i);
 //                    main.list.changeImg(0, main.list, i);  
             }
         }
-
         // Fetch purchased videos
         try (PreparedStatement stmt = connection.prepareStatement(sqlPurchasedVideos)) {
             try (ResultSet resultSet = stmt.executeQuery()) {

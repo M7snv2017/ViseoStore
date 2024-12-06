@@ -19,14 +19,15 @@ import video.store.*;
 
 public class VideosList extends JPanel {
 
-    
+    CStream s;
     Favorites fav;
-    public VideosList(ArrayList<Video> vl,Favorites f)
+    public VideosList(ArrayList<Video> vl,CStream s,Favorites f)
     {
+        this.s=s;
         fav=f;
         initialize(vl);
     }
-    CStream s;
+    
     public VideosList(ArrayList<Video> vl,CStream s) {  //vl: videos list
         this.s=s;
         initialize(vl);
@@ -61,11 +62,15 @@ public class VideosList extends JPanel {
 
         JLabel img = new JLabel();
         try {
-            img.setIcon(video.getImage());
+            ImageIcon imageIcon = video.getImage();
+            Image imgScaled = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            img.setIcon(new ImageIcon(imgScaled));
+            img.setPreferredSize(new Dimension(150, 150));
+            img.setMaximumSize(new Dimension(150, 150));
         } catch (Exception e) {
             img.setText("Cannot display image");
         }
-
+        
         JLabel title = new JLabel("Title: " + video.getTitle());
         JLabel genre = new JLabel("Genre: " + video.getGenre());
         JLabel year = new JLabel("Year: " + video.getYear());
@@ -88,38 +93,40 @@ public class VideosList extends JPanel {
         toCart.addItemListener((ItemEvent i1) -> {
             int state = i1.getStateChange();
             if (state != ItemEvent.SELECTED) {
+                // Item removed from cart
                 try {
                     ImageIcon noCart = new ImageIcon("src\\resources\\images\\noCart.png");
-                    
                     Image image = noCart.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     noCart = new ImageIcon(newimg);
                     toCart.setIcon(noCart);
                     CStream.ca.remove(video);
-                    s.container.repaint();
-                    video.FavoriteFlag=false;
-                    System.out.println("cart "+video.id+" : "+video.FavoriteFlag);
+
+                    // Trigger cart refresh
+                    s.cart.updateCartDisplay();
+
                 } catch (Exception e) {
                     toCart.setText("Remove from Cart");
                 }
             } else {
+                // Item added to cart
                 try {
                     ImageIcon cart = new ImageIcon("src\\resources\\images\\cart.png");
-                    
                     Image image = cart.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     cart = new ImageIcon(newimg);
                     toCart.setIcon(cart);
                     CStream.ca.add(video);
-                    s.container.repaint();
-                    video.FavoriteFlag=true;
-                    System.out.println("cart "+video.id+" : "+video.FavoriteFlag);
+
+                    // Trigger cart refresh
+                    s.cart.updateCartDisplay();
+
                 } catch (Exception e) {
                     toCart.setText("Add to Cart");
                 }
-                
             }
         });
+
 
         JToggleButton toFavorite = new JToggleButton();
         toFavorite.setFocusPainted(false);
@@ -128,7 +135,7 @@ public class VideosList extends JPanel {
             if(video.FavoriteFlag)
                  favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
             else
-                 favorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
+                favorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
             Image image = favorite.getImage();
             Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             favorite = new ImageIcon(newimg);
@@ -138,59 +145,102 @@ public class VideosList extends JPanel {
             toFavorite.setText("Add to Favorite");
         }
 
+//        toFavorite.addItemListener((ItemEvent i2) -> {
+//            
+//            int state = i2.getStateChange();
+//            if (state != ItemEvent.SELECTED) {
+//                try {
+//                    ImageIcon noFavorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
+//                    
+//                    Image image = noFavorite.getImage();
+//                    Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+//                    noFavorite = new ImageIcon(newimg);
+//                    toFavorite.setIcon(noFavorite);
+//                    
+//                    CStream.fv.remove(video);
+//                    
+//                    for (var s : CStream.fv)
+//                    {
+//                        System.out.println(s.id);
+//                    }
+//                   
+//                    video.FavoriteFlag=false;
+//                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
+//                    if(fav!=null)
+//                        fav.change(CStream.fv);
+////                    s.container.repaint();
+//                    s.favorites= new Favorites(CStream.fv, s);
+//                } catch (Exception e) {
+//                    toFavorite.setText("Remove from Favorite");
+//                }
+//            } else {
+//                try {
+//                    ImageIcon favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
+//                    
+//                    Image image = favorite.getImage();
+//                    Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+//                    favorite = new ImageIcon(newimg);
+//                    toFavorite.setIcon(favorite);
+//                    
+//                    CStream.fv.add(video);
+//                    
+//                    initialize(CStream.fv);
+//                    for (var s : CStream.fv)
+//                    {
+//                        System.out.println(s.id);
+//                    }
+////                    s.container.repaint();
+//                    video.FavoriteFlag=true;
+//                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
+//                    if(fav!=null)
+//                        fav.change(CStream.fv);
+//                } catch (Exception e) {
+//                    toFavorite.setText("Add to Favorite");
+//                }
+//            }
+//        });
         toFavorite.addItemListener((ItemEvent i2) -> {
-            
             int state = i2.getStateChange();
             if (state != ItemEvent.SELECTED) {
                 try {
                     ImageIcon noFavorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
-                    
                     Image image = noFavorite.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     noFavorite = new ImageIcon(newimg);
                     toFavorite.setIcon(noFavorite);
-                    
+
                     CStream.fv.remove(video);
-                    
-                    for (var s : CStream.fv)
-                    {
-                        System.out.println(s.id);
+                    video.FavoriteFlag = false;
+                    System.out.println("Removed from favorites: " + video.id);
+
+                    if (fav != null) {
+                        fav.refresh();
                     }
-                    s.container.repaint();
-                    video.FavoriteFlag=false;
-                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
-                    if(fav!=null)
-                        fav.change(CStream.fv);
-                    s.favorites= new Favorites(CStream.fv, s);
                 } catch (Exception e) {
                     toFavorite.setText("Remove from Favorite");
                 }
             } else {
                 try {
                     ImageIcon favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
-                    
                     Image image = favorite.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     favorite = new ImageIcon(newimg);
                     toFavorite.setIcon(favorite);
-                    
+
                     CStream.fv.add(video);
-                    
-                    initialize(CStream.fv);
-                    for (var s : CStream.fv)
-                    {
-                        System.out.println(s.id);
+                    video.FavoriteFlag = true;
+                    System.out.println("Added to favorites: " + video.id);
+
+                    if (fav != null) {
+                        fav.refresh();
                     }
-                    s.container.repaint();
-                    video.FavoriteFlag=true;
-                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
-                    if(fav!=null)
-                        fav.change(CStream.fv);
                 } catch (Exception e) {
                     toFavorite.setText("Add to Favorite");
                 }
             }
         });
+
+
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridheight = 2;

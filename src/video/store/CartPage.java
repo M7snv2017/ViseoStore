@@ -63,6 +63,7 @@ public class CartPage extends JPanel {
         }
 
         JScrollPane cart = new JScrollPane(cartItems);
+        cart.getVerticalScrollBar().setUnitIncrement(16);
         this.add(cart, BorderLayout.CENTER);
     }
     
@@ -112,6 +113,12 @@ public class CartPage extends JPanel {
         itemPanel.add(removeButton);
 
         return itemPanel;
+    }
+    public void updateCartDisplay() {
+        this.removeAll(); // Clear existing components
+        initialize();     // Rebuild the UI
+        this.revalidate(); // Refresh the panel
+        this.repaint();
     }
 
     //For test

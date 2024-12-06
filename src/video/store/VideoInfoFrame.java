@@ -24,6 +24,8 @@ public class VideoInfoFrame extends JFrame {
             ImageIcon icn = video.getImage();
             Image image = icn.getImage();
             Image newimg = image.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            img.setHorizontalAlignment(SwingConstants.CENTER);
+            img.setVerticalAlignment(SwingConstants.CENTER);
             icn = new ImageIcon(newimg);
             img.setIcon(icn);
         } catch (Exception e) {

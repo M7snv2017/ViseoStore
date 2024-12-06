@@ -39,7 +39,6 @@ public class Main extends JPanel {
         gbc.weighty = 2.0;
         this.add(search, gbc);
 
-        
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 0;
@@ -48,6 +47,7 @@ public class Main extends JPanel {
         gbc.weighty = 10.0;
         list = new VideosList(allVideos, s);
         JScrollPane allVideoScrollPane = new JScrollPane(list);
+        allVideoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
         this.add(allVideoScrollPane, gbc);   
     }
 
