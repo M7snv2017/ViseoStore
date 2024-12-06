@@ -144,61 +144,6 @@ public class VideosList extends JPanel {
         } catch (Exception e) {
             toFavorite.setText("Add to Favorite");
         }
-
-//        toFavorite.addItemListener((ItemEvent i2) -> {
-//            
-//            int state = i2.getStateChange();
-//            if (state != ItemEvent.SELECTED) {
-//                try {
-//                    ImageIcon noFavorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
-//                    
-//                    Image image = noFavorite.getImage();
-//                    Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-//                    noFavorite = new ImageIcon(newimg);
-//                    toFavorite.setIcon(noFavorite);
-//                    
-//                    CStream.fv.remove(video);
-//                    
-//                    for (var s : CStream.fv)
-//                    {
-//                        System.out.println(s.id);
-//                    }
-//                   
-//                    video.FavoriteFlag=false;
-//                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
-//                    if(fav!=null)
-//                        fav.change(CStream.fv);
-////                    s.container.repaint();
-//                    s.favorites= new Favorites(CStream.fv, s);
-//                } catch (Exception e) {
-//                    toFavorite.setText("Remove from Favorite");
-//                }
-//            } else {
-//                try {
-//                    ImageIcon favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
-//                    
-//                    Image image = favorite.getImage();
-//                    Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-//                    favorite = new ImageIcon(newimg);
-//                    toFavorite.setIcon(favorite);
-//                    
-//                    CStream.fv.add(video);
-//                    
-//                    initialize(CStream.fv);
-//                    for (var s : CStream.fv)
-//                    {
-//                        System.out.println(s.id);
-//                    }
-////                    s.container.repaint();
-//                    video.FavoriteFlag=true;
-//                    System.out.println("favorite "+video.id+" : "+video.FavoriteFlag);
-//                    if(fav!=null)
-//                        fav.change(CStream.fv);
-//                } catch (Exception e) {
-//                    toFavorite.setText("Add to Favorite");
-//                }
-//            }
-//        });
         toFavorite.addItemListener((ItemEvent i2) -> {
             int state = i2.getStateChange();
             if (video.FavoriteFlag != false) {
