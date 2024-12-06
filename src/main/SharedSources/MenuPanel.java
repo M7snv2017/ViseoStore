@@ -30,15 +30,22 @@ public class MenuPanel extends JPanel {
         Font font = new Font("Arial", Font.BOLD, 16);
         
         String[] bNames = {"Main", "Favorite", "Cart", "Purchases", "Account"};
-        for(int i=0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
             JButton button = Util.createButton(bNames[i], bgColor, fgColor, font);
-            button.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+            button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+            
+            if (i == 0) {
+                // Customize the "Main" button as the default selected
+                button.setBackground(new Color(60, 60, 60));
+                button.setForeground(Color.WHITE);
+                selectedButton = button; // Set the "Main" button as the selected button
+            }
 
             button.setActionCommand(bNames[i]);
             button.addActionListener(new ActionListenerImpl());
             button.addActionListener(listener);
 
-            Util.addComponent(this, button, i!=4?i:++i, 0, 1.0, 1.0);
+            Util.addComponent(this, button, i != 4 ? i : ++i, 0, 1.0, 1.0);
         }
         
         GridBagConstraints constraints = new GridBagConstraints();
