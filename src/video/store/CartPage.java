@@ -6,6 +6,8 @@ package video.store;
  */
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -109,7 +111,17 @@ public class CartPage extends JPanel {
             removeButton.setText("Remove from Cart");
         }
 
-        removeButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Item"+(i+1) + " removed from cart."));
+        removeButton.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                
+                CStream.ca.remove(video);
+                updateCartDisplay();
+                JOptionPane.showMessageDialog(null, "Item"+(i+1) + " removed from cart.");
+            }
+        
+        });
+        
         itemPanel.add(removeButton);
 
         return itemPanel;

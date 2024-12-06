@@ -101,7 +101,7 @@ public class VideosList extends JPanel {
                     noCart = new ImageIcon(newimg);
                     toCart.setIcon(noCart);
                     CStream.ca.remove(video);
-
+                    
                     // Trigger cart refresh
                     s.cart.updateCartDisplay();
 
@@ -201,7 +201,7 @@ public class VideosList extends JPanel {
 //        });
         toFavorite.addItemListener((ItemEvent i2) -> {
             int state = i2.getStateChange();
-            if (state != ItemEvent.SELECTED) {
+            if (video.FavoriteFlag != false) {
                 try {
                     ImageIcon noFavorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
                     Image image = noFavorite.getImage();

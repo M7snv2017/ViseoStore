@@ -1,12 +1,6 @@
 
 package main.SharedSources;
 
-/**
- * MenuPanel is the one which representing the sidebar where user can move around the other panels(main, favorite, ...)
- * You can simply attach this panel to any JFrame by instantiating it in you frame
- * @author Mustafa
- */
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
