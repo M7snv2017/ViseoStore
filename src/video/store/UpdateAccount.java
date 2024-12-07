@@ -33,6 +33,7 @@ public class UpdateAccount extends JFrame implements ActionListener {
     public UpdateAccount(Customer c,AccountPage a) {
         
         customer_id = c.customerId;
+        JOptionPane.showMessageDialog(null, "Here");
         this.setTitle("Update Information");
         this.setSize(400, 250);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -104,6 +105,7 @@ public class UpdateAccount extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == updateBtn) {
+         JOptionPane.showMessageDialog(null, "Update Successfully.hi"+customer_id, "Info", JOptionPane.INFORMATION_MESSAGE);
 
             String uName = username.getText();
             String pass =new String( password.getPassword());
