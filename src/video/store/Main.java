@@ -9,18 +9,15 @@ package video.store;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import main.SharedSources.SearchPanel;
 import main.SharedSources.VideosList;
 
 public class Main extends JPanel {
-    SearchPanel search = new SearchPanel();
     VideosList list;
     CStream s;
     public Main(ArrayList<Video> allVideos,CStream s) {
@@ -37,6 +34,7 @@ public class Main extends JPanel {
         lbl.setFont(new Font("Arial", Font.BOLD, 16));
         this.add(lbl,gbc);
 
+        /* 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.insets = new Insets(20,0,0,0);
@@ -47,6 +45,7 @@ public class Main extends JPanel {
         gbc.weighty = 2.0;
         this.add(search, gbc);
 
+        */
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 0;
@@ -74,16 +73,6 @@ public class Main extends JPanel {
         JLabel lbl = new JLabel ("Main Page");
         lbl.setFont(new Font("Arial", Font.BOLD, 16));
         this.add(lbl,gbc);
-
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(20,0,0,0);
-        gbc.gridheight = 1;
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.weightx = 0.4;
-        gbc.weighty = 2.0;
-        this.add(search, gbc);
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;

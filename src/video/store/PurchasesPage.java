@@ -65,7 +65,7 @@ public class PurchasesPage extends JPanel {
                 gbc.gridy = i / 3;
                 gbc.weightx = 0.1;
                 gbc.weighty = 0.1;
-                gbc.fill = GridBagConstraints.BOTH;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 purchases.add(createItem(i, videos.get(i)), gbc);
             }
         }
@@ -76,7 +76,7 @@ public class PurchasesPage extends JPanel {
 
     private JPanel createItem(int i, Video video) {
         JPanel itemPanel = new JPanel();
-        itemPanel.setLayout(new GridLayout(3, 0));
+        itemPanel.setLayout(new GridLayout(5, 3));
         itemPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);

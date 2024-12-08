@@ -93,15 +93,6 @@ public class HomePage extends JFrame {
         });
         panel.add(registerButton);
 
-        /* 
-        JLabel adminLoginLabel = new JLabel("Login as an admin", SwingConstants.CENTER);
-        adminLoginLabel.setForeground(Color.BLUE);
-        adminLoginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Make it look clickable
-        adminLoginLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(adminLoginLabel);
-        */
-
         add(panel, BorderLayout.CENTER);
 
         setVisible(true);

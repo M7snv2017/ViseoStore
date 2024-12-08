@@ -47,7 +47,7 @@ public class CStream extends JFrame implements ActionListener {
     Customer c;
 
     public CStream(Customer customer) {
-        super("Test");
+        super("Main Page");
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setPreferredSize(new Dimension(800, 500));

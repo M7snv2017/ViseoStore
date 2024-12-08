@@ -37,7 +37,8 @@ import javax.swing.border.TitledBorder;
 public class CartPage extends JPanel {
 
     private ArrayList<Video> videos = new ArrayList();
-    private double total;
+    private double total=0;
+    private JLabel totalLabel;
     private Connection conn;
     CStream s;
 
@@ -57,7 +58,7 @@ public class CartPage extends JPanel {
         JPanel purchasePanel = new JPanel();
         purchasePanel.setLayout(new BorderLayout());
 
-        JLabel totalLabel = new JLabel("Total: $" + total, SwingConstants.CENTER);
+        totalLabel = new JLabel("Total: $" + total, SwingConstants.CENTER);
         totalLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
         JButton buyButton = new JButton("Buy");
@@ -66,6 +67,7 @@ public class CartPage extends JPanel {
             System.out.println("Buy button clicked.");
             processPurchase();
         });
+        purchasePanel.add(totalLabel, BorderLayout.NORTH);
         purchasePanel.add(buyButton, BorderLayout.SOUTH);
 
         JPanel cartItems = new JPanel(new GridBagLayout());
@@ -84,13 +86,12 @@ public class CartPage extends JPanel {
                 gbc.gridy = i / 3;
                 gbc.weightx = 0.1;
                 gbc.weighty = 0.1;
-                gbc.fill = GridBagConstraints.BOTH;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 cartItems.add(createCartItem(i, videos.get(i)), gbc);
                 total += videos.get(i).getPrice();
             }
         }
-
-        purchasePanel.add(totalLabel, BorderLayout.NORTH);
+        totalLabel.setText("Total: $" + total);
         this.add(purchasePanel, BorderLayout.SOUTH);
 
         JScrollPane cart = new JScrollPane(cartItems);
@@ -100,7 +101,7 @@ public class CartPage extends JPanel {
 
     private JPanel createCartItem(int i, Video video) {
         JPanel itemPanel = new JPanel();
-        itemPanel.setLayout(new GridLayout(4, 0));
+        itemPanel.setLayout(new GridLayout(5, 1));
         itemPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
@@ -146,6 +147,7 @@ public class CartPage extends JPanel {
                 CStream.ca.remove(video);
                 video.cartFlag = false;
                 total -= video.getPrice();
+                totalLabel.setText("Total: $" + total);
                 updateCartDisplay();
                 s.main.refresh();
                 JOptionPane.showMessageDialog(null, "Item" + (i + 1) + " removed from cart.");
@@ -192,6 +194,8 @@ public class CartPage extends JPanel {
 
                 pstmt.executeBatch();
                 videos.clear(); // Clear the videos after successful purchase
+                total = 0;
+                totalLabel.setText("Total: $" + total);
                 JOptionPane.showMessageDialog(null, "Purchase confirmed!");
                 updateCartDisplay(); // Update the display after purchase
             }
