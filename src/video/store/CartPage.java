@@ -1,25 +1,48 @@
 package video.store;
 
 /**
- * 
+ *
  * @author Mustafa
  */
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 public class CartPage extends JPanel {
 
     private ArrayList<Video> videos = new ArrayList();
-    private final double total = 0;
+    private double total;
+    private Connection conn;
     CStream s;
-    public CartPage(ArrayList<Video> video,CStream s) {
-        this.s=s;
+
+    public CartPage(ArrayList<Video> video, CStream s) {
+        this.s = s;
         videos = video;
         initialize();
     }
@@ -36,14 +59,15 @@ public class CartPage extends JPanel {
 
         JLabel totalLabel = new JLabel("Total: $" + total, SwingConstants.CENTER);
         totalLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        purchasePanel.add(totalLabel, BorderLayout.NORTH);
 
         JButton buyButton = new JButton("Buy");
         buyButton.setFont(new Font("Arial", Font.BOLD, 16));
-        buyButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "Purchase confirmed!"));
+        buyButton.addActionListener((ActionEvent e) -> {
+            System.out.println("Buy button clicked.");
+            processPurchase();
+        });
         purchasePanel.add(buyButton, BorderLayout.SOUTH);
-        this.add(purchasePanel, BorderLayout.SOUTH);
-        
+
         JPanel cartItems = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -53,35 +77,39 @@ public class CartPage extends JPanel {
             lbl.setForeground(Color.BLACK);
             cartItems.add(lbl);
         } else {
+            total = 0;
             for (int i = 0; i < videos.size(); i++) {
-                gbc.insets = new Insets(10,10,0,10);  //top padding
-                gbc.gridx = i%3;
-                gbc.gridy = i/3;
+                gbc.insets = new Insets(10, 10, 0, 10);  //top padding
+                gbc.gridx = i % 3;
+                gbc.gridy = i / 3;
                 gbc.weightx = 0.1;
                 gbc.weighty = 0.1;
-                gbc.fill = GridBagConstraints.BOTH;  
+                gbc.fill = GridBagConstraints.BOTH;
                 cartItems.add(createCartItem(i, videos.get(i)), gbc);
-            } 
+                total += videos.get(i).getPrice();
+            }
         }
+
+        purchasePanel.add(totalLabel, BorderLayout.NORTH);
+        this.add(purchasePanel, BorderLayout.SOUTH);
 
         JScrollPane cart = new JScrollPane(cartItems);
         cart.getVerticalScrollBar().setUnitIncrement(16);
         this.add(cart, BorderLayout.CENTER);
     }
-    
+
     private JPanel createCartItem(int i, Video video) {
         JPanel itemPanel = new JPanel();
-        itemPanel.setLayout(new GridLayout(4,0));
+        itemPanel.setLayout(new GridLayout(4, 0));
         itemPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        
+
         Border blackline = BorderFactory.createLineBorder(Color.BLACK);
         TitledBorder videoCard;
-        videoCard = BorderFactory.createTitledBorder(blackline, "Item "+(i+1));
+        videoCard = BorderFactory.createTitledBorder(blackline, "Item " + (i + 1));
         videoCard.setTitleJustification(TitledBorder.CENTER);
         itemPanel.setBorder(videoCard);
 
-        JLabel num = new JLabel(""+i);
+        JLabel num = new JLabel("" + i);
         JLabel img = new JLabel();
         try {
             img.setIcon(video.getImage());
@@ -92,10 +120,10 @@ public class CartPage extends JPanel {
         img.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         itemPanel.add(img);
 
-        JLabel title = new JLabel(""+video.getTitle(), SwingConstants.CENTER);
+        JLabel title = new JLabel("" + video.getTitle(), SwingConstants.CENTER);
         itemPanel.add(title);
 
-        JLabel price = new JLabel("$"+video.getPrice(), SwingConstants.CENTER);
+        JLabel price = new JLabel("$" + video.getPrice(), SwingConstants.CENTER);
         itemPanel.add(price);
 
         JButton removeButton = new JButton();
@@ -111,40 +139,77 @@ public class CartPage extends JPanel {
             removeButton.setText("Remove from Cart");
         }
 
-        removeButton.addActionListener(new ActionListener(){
+        removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+
                 CStream.ca.remove(video);
+                video.cartFlag = false;
+                total -= video.getPrice();
                 updateCartDisplay();
-                JOptionPane.showMessageDialog(null, "Item"+(i+1) + " removed from cart.");
+                s.main.refresh();
+                JOptionPane.showMessageDialog(null, "Item" + (i + 1) + " removed from cart.");
             }
-        
+
         });
-        
+
         itemPanel.add(removeButton);
 
         return itemPanel;
     }
+
+    private void connectToDatabase() {
+        try {
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559",
+                    "sql12747559",
+                    "zdI3qyjlca"
+            );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage());
+        }
+    }
+
+    private void processPurchase() {
+        if (videos.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Cart is empty!");
+            return;
+        }
+
+        try {
+            if (conn == null || conn.isClosed()) {
+                connectToDatabase(); // Ensure the connection is open
+            }
+
+            try (PreparedStatement pstmt = conn.prepareStatement(
+                    "INSERT INTO Purchases (customerid, videoid) VALUES (?, ?)"
+            )) {
+                for (Video v : videos) {
+                    pstmt.setInt(1, s.getCustomerId());
+                    pstmt.setInt(2, v.getId());
+                    pstmt.addBatch();
+                }
+
+                pstmt.executeBatch();
+                videos.clear(); // Clear the videos after successful purchase
+                JOptionPane.showMessageDialog(null, "Purchase confirmed!");
+                updateCartDisplay(); // Update the display after purchase
+            }
+
+        } catch (SQLException e) {
+            if (e instanceof SQLIntegrityConstraintViolationException) {
+                JOptionPane.showMessageDialog(null, "Error during purchase: Some items were already purchased");
+            } else {
+                JOptionPane.showMessageDialog(null, "Error during purchase: " + e.getMessage());
+            }
+        }
+
+    }
+
     public void updateCartDisplay() {
         this.removeAll(); // Clear existing components
         initialize();     // Rebuild the UI
         this.revalidate(); // Refresh the panel
         this.repaint();
     }
-
-    //For test
-//    public static void main(String[] args) {
-//        JFrame frm = new JFrame();
-//        ArrayList<Video> videos = new ArrayList();
-//        Video video = new Video();
-//        
-//        CartPage p = new CartPage(videos);
-//
-//        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        frm.setSize(800, 500);
-//        frm.setLocationRelativeTo(null);
-//        frm.add(p);
-//        frm.setVisible(true);
-//    }
 }

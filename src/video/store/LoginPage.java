@@ -6,12 +6,26 @@ package video.store;
  *
  * @author Mustafa
  */
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.*;
-import javax.swing.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import main.SharedSources.Util.placeHolderListener;
 
 public class LoginPage extends JFrame {
@@ -151,20 +165,23 @@ public class LoginPage extends JFrame {
         // Simple validation 
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(LoginPage.this, "Username or Password cannot be empty!", "Retry", JOptionPane.WARNING_MESSAGE);
-        } else {
-            boolean userExists = exist(username, password);
-            if (!userExists) {
-                JOptionPane.showMessageDialog(LoginPage.this, "Invalid Username or Password!", "Invalid Information", JOptionPane.WARNING_MESSAGE);
-            } else {
-                Customer c = new Customer();
-                c.customerId = getId(username);
-                c.customerUserName=username;
-                c.customerPassword=password;
-                main = new CStream(c);
-                main.setVisible(true);
-                hp.dispose();
-                this.dispose();
-            }
+        } else {new Thread(() -> {
+                boolean userExists = exist(username, password);
+                SwingUtilities.invokeLater(() -> {
+                    if (!userExists) {
+                        JOptionPane.showMessageDialog(LoginPage.this, "Invalid Username or Password!", "Invalid Information", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        Customer c = new Customer();
+                        c.customerId = getId(username);
+                        c.customerUserName = username;
+                        c.customerPassword = password;
+                        main = new CStream(c);
+                        main.setVisible(true);
+                        hp.dispose();
+                        this.dispose();
+                    }
+                });
+            }).start(); // Start the thread
         }
     }
 }

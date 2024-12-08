@@ -2,7 +2,7 @@ package video.store;
 
 import javax.swing.ImageIcon;
 
-public class Video  {
+public class Video {
 
     public int id; //(Mustafa) for ID, a value must be automatically assigned, using sequence for example.
     private int purchaseFrequency, //(Mustafa) Rate replaced. Rating seems to be complext.
@@ -16,13 +16,14 @@ public class Video  {
             year;
     private ImageIcon image;
     CartPage cart;
-    public boolean FavoriteFlag;
-    public Video() 
-    {
-        
+    public boolean FavoriteFlag,
+            cartFlag;
+
+    public Video() {
+
     }
 
-    public Video(int id, int purchaseFrequency, int price, String title, String director, String synopsis, String ageGroup, String genre, String videoSource, String year, ImageIcon image,CartPage cart) {
+    public Video(int id, int purchaseFrequency, int price, String title, String director, String synopsis, String ageGroup, String genre, String videoSource, String year, ImageIcon image, CartPage cart) {
         this.id = id;
         this.purchaseFrequency = purchaseFrequency;
         this.price = price;
@@ -34,10 +35,11 @@ public class Video  {
         this.videoSource = videoSource;
         this.year = year;
         this.image = image;
-        this.cart=cart;
-        this.FavoriteFlag=false;
+        this.cart = cart;
+        this.FavoriteFlag = false;
+        this.cartFlag = false;
     }
-    
+
     public Video(int id, int purchaseFrequency, int price, String ageGroup, String genre, String videoSource, ImageIcon image) {
         this.id = id;
         this.purchaseFrequency = purchaseFrequency;
@@ -46,6 +48,15 @@ public class Video  {
         this.genre = genre;
         this.videoSource = videoSource;
         this.image = image;
+    }
+
+    public Video(String title, int price) {
+        this.title = title;
+        this.price = price;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public void incrementPurchaseFrequency() {

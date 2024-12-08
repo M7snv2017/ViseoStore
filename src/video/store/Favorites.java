@@ -1,37 +1,48 @@
 package video.store;
 
 /**
- * Here is where favorite videos of a customer are shown to him, and search feature is provided.
- * 
+ * Here is where favorite videos of a customer are shown to him, and search
+ * feature is provided.
+ *
  * @author Mustafa
  */
-
-import java.awt.*;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
-import javax.swing.*;
-import main.SharedSources.*;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import main.SharedSources.SearchPanel;
+import main.SharedSources.VideosList;
 
 public class Favorites extends JPanel {
+
     SearchPanel search = new SearchPanel();
     VideosList list;
     CStream s;
     Container c;
-    public Favorites(ArrayList<Video> favorites,CStream s) {
+
+    public Favorites(ArrayList<Video> favorites, CStream s) {
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        this.s=s;
+        this.s = s;
         gbc.fill = GridBagConstraints.CENTER;
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
-        JLabel lbl = new JLabel ("Favorites Page");
+        JLabel lbl = new JLabel("Favorites Page");
         lbl.setFont(new Font("Arial", Font.BOLD, 16));
-        this.add(lbl,gbc);
+        this.add(lbl, gbc);
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.NORTH;
-        gbc.insets = new Insets(20,0,0,0);
+        gbc.insets = new Insets(20, 0, 0, 0);
         gbc.gridheight = 1;
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -39,73 +50,57 @@ public class Favorites extends JPanel {
         gbc.weighty = 2.0;
         this.add(search, gbc);
 
-        
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 1.0;
         gbc.weighty = 10.0;
-        list = new VideosList(favorites, s,Favorites.this);
+        list = new VideosList(favorites, s, Favorites.this);
         JScrollPane favoritesScrollPane = new JScrollPane(list);
         favoritesScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        this.add(favoritesScrollPane, gbc);   
+        this.add(favoritesScrollPane, gbc);
     }
-    public void change(ArrayList<Video> favorites)
-    {
-        list = new VideosList(favorites, s,Favorites.this);
+
+    public void change(ArrayList<Video> favorites) {
+        list = new VideosList(favorites, s, Favorites.this);
     }
-    
+
     public void refresh() {
-    removeAll();
-    revalidate();
-    repaint();
+        removeAll();
+        revalidate();
+        repaint();
 
-    GridBagConstraints gbc = new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
 
-    gbc.fill = GridBagConstraints.CENTER;
-    gbc.gridx = 0;
-    gbc.gridy = 0;
-    gbc.weightx = 0.1;
-    gbc.weighty = 0.1;
-    JLabel lbl = new JLabel("Favorites Page");
-    lbl.setFont(new Font("Arial", Font.BOLD, 16));
-    add(lbl, gbc);
+        gbc.fill = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.1;
+        gbc.weighty = 0.1;
+        JLabel lbl = new JLabel("Favorites Page");
+        lbl.setFont(new Font("Arial", Font.BOLD, 16));
+        add(lbl, gbc);
 
-    gbc.fill = GridBagConstraints.BOTH;
-    gbc.anchor = GridBagConstraints.NORTH;
-    gbc.insets = new Insets(20, 0, 0, 0);
-    gbc.gridheight = 1;
-    gbc.gridx = 0;
-    gbc.gridy = 1;
-    gbc.weightx = 0.4;
-    gbc.weighty = 2.0;
-    add(search, gbc);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        gbc.gridheight = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.weightx = 0.4;
+        gbc.weighty = 2.0;
+        add(search, gbc);
 
-    gbc.fill = GridBagConstraints.BOTH;
-    gbc.anchor = GridBagConstraints.CENTER;
-    gbc.gridx = 0;
-    gbc.gridy = 2;
-    gbc.weightx = 1.0;
-    gbc.weighty = 10.0;
-    list = new VideosList(CStream.fv, s, this);
-    JScrollPane favoritesScrollPane = new JScrollPane(list);
-    favoritesScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-    add(favoritesScrollPane, gbc);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 10.0;
+        list = new VideosList(CStream.fv, s, this);
+        JScrollPane favoritesScrollPane = new JScrollPane(list);
+        favoritesScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        add(favoritesScrollPane, gbc);
+    }
 }
-    
-    //for test
-//    public static void main(String[] args) {
-//        JFrame frm = new JFrame();
-//
-//        ArrayList<Video> arr = new ArrayList<>();
-//        Main p = new Main(arr);
-//
-//        frm.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//        frm.setSize(800, 500);
-//        frm.setLocationRelativeTo(null);
-//        frm.add(p);
-//        frm.setVisible(true);   
-//    }
-}
-

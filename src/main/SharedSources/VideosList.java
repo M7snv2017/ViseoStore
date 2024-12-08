@@ -7,29 +7,47 @@ package main.SharedSources;
  *
  * @author Mustafa
  */
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
-import video.store.*;
+
+import video.store.CStream;
+import video.store.Favorites;
+import video.store.Video;
+import video.store.VideoInfoFrame;
 
 public class VideosList extends JPanel {
 
     CStream s;
     Favorites fav;
-    public VideosList(ArrayList<Video> vl,CStream s,Favorites f)
-    {
-        this.s=s;
-        fav=f;
+
+    public VideosList(ArrayList<Video> vl, CStream s, Favorites f) {
+        this.s = s;
+        fav = f;
         initialize(vl);
     }
-    
-    public VideosList(ArrayList<Video> vl,CStream s) {  //vl: videos list
-        this.s=s;
+
+    public VideosList(ArrayList<Video> vl, CStream s) {  //vl: videos list
+        this.s = s;
         initialize(vl);
     }
 
@@ -50,9 +68,7 @@ public class VideosList extends JPanel {
     }
 
     private JPanel addVideo(Video video, int i) {
-        
-        
-        
+
         JPanel panel = new JPanel();
         panel.setSize(570, 50);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -70,7 +86,7 @@ public class VideosList extends JPanel {
         } catch (Exception e) {
             img.setText("Cannot display image");
         }
-        
+
         JLabel title = new JLabel("Title: " + video.getTitle());
         JLabel genre = new JLabel("Genre: " + video.getGenre());
         JLabel year = new JLabel("Year: " + video.getYear());
@@ -79,7 +95,14 @@ public class VideosList extends JPanel {
         JToggleButton toCart = new JToggleButton();
         toCart.setFocusPainted(false);
         try {
-            ImageIcon cart = new ImageIcon("src\\resources\\images\\noCart.png");
+            ImageIcon cart;
+            if (!video.cartFlag) {
+                cart = new ImageIcon("src\\resources\\images\\cart.png");
+                toCart.setSelected(false);
+            } else {
+                cart = new ImageIcon("src\\resources\\images\\noCart.png");
+                toCart.setSelected(true);
+            }
 
             Image image = cart.getImage();
             Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
@@ -92,50 +115,54 @@ public class VideosList extends JPanel {
 
         toCart.addItemListener((ItemEvent i1) -> {
             int state = i1.getStateChange();
-            if (state != ItemEvent.SELECTED) {
-                // Item removed from cart
+            if (state == ItemEvent.SELECTED) {
                 try {
                     ImageIcon noCart = new ImageIcon("src\\resources\\images\\noCart.png");
                     Image image = noCart.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     noCart = new ImageIcon(newimg);
                     toCart.setIcon(noCart);
-                    CStream.ca.remove(video);
-                    
-                    // Trigger cart refresh
-                    s.cart.updateCartDisplay();
-
                 } catch (Exception e) {
                     toCart.setText("Remove from Cart");
                 }
+                CStream.ca.add(video);
+                video.cartFlag = true;
+                toCart.setSelected(true);
+                s.cart.updateCartDisplay();
+                s.main.refresh();
+
             } else {
-                // Item added to cart
                 try {
                     ImageIcon cart = new ImageIcon("src\\resources\\images\\cart.png");
                     Image image = cart.getImage();
                     Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
                     cart = new ImageIcon(newimg);
                     toCart.setIcon(cart);
-                    CStream.ca.add(video);
-
-                    // Trigger cart refresh
-                    s.cart.updateCartDisplay();
 
                 } catch (Exception e) {
                     toCart.setText("Add to Cart");
                 }
+
+                CStream.ca.remove(video);
+                video.cartFlag = false;
+                toCart.setSelected(false);
+                s.cart.updateCartDisplay();
+                s.main.refresh();
             }
         });
-
 
         JToggleButton toFavorite = new JToggleButton();
         toFavorite.setFocusPainted(false);
         try {
             ImageIcon favorite;
-            if(video.FavoriteFlag)
-                 favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
-            else
+            if (!video.FavoriteFlag) {
+                favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
+                toFavorite.setSelected(false);
+            } else {
                 favorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
+                toFavorite.setSelected(true);
+            }
+
             Image image = favorite.getImage();
             Image newimg = image.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             favorite = new ImageIcon(newimg);
@@ -146,7 +173,7 @@ public class VideosList extends JPanel {
         }
         toFavorite.addItemListener((ItemEvent i2) -> {
             int state = i2.getStateChange();
-            if (video.FavoriteFlag != false) {
+            if (state == ItemEvent.SELECTED) {
                 try {
                     ImageIcon noFavorite = new ImageIcon("src\\resources\\images\\noFavorite.png");
                     Image image = noFavorite.getImage();
@@ -154,16 +181,15 @@ public class VideosList extends JPanel {
                     noFavorite = new ImageIcon(newimg);
                     toFavorite.setIcon(noFavorite);
 
-                    CStream.fv.remove(video);
-                    video.FavoriteFlag = false;
-                    System.out.println("Removed from favorites: " + video.id);
-
-                    if (fav != null) {
-                        fav.refresh();
-                    }
-                } catch (Exception e) {
+                    fav.refresh();
+                } catch (Exception ex) {
                     toFavorite.setText("Remove from Favorite");
                 }
+
+                CStream.fv.add(video);
+                video.FavoriteFlag = true;
+                toFavorite.setSelected(true);
+                System.out.println("Removed from favorites: " + video.id);
             } else {
                 try {
                     ImageIcon favorite = new ImageIcon("src\\resources\\images\\Favorite.png");
@@ -172,20 +198,17 @@ public class VideosList extends JPanel {
                     favorite = new ImageIcon(newimg);
                     toFavorite.setIcon(favorite);
 
-                    CStream.fv.add(video);
-                    video.FavoriteFlag = true;
-                    System.out.println("Added to favorites: " + video.id);
-
-                    if (fav != null) {
-                        fav.refresh();
-                    }
-                } catch (Exception e) {
+                } catch (Exception ex) {
                     toFavorite.setText("Add to Favorite");
                 }
+                CStream.fv.remove(video);
+                video.FavoriteFlag = false;
+                toFavorite.setSelected(false);
+                System.out.println("Added to favorites: " + video.id);
+                fav.refresh();
+                s.main.refresh();
             }
         });
-
-
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridheight = 2;

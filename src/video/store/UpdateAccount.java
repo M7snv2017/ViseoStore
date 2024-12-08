@@ -1,22 +1,34 @@
 package video.store;
 
 /**
- *  This class was initially created by Mohsin, and improved by Mustafa.
+ * This class was initially created by Mohsin, and improved by Mustafa.
+ *
  * @author Mustafa
  */
-
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.sql.*;
-import javax.swing.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+
 import main.SharedSources.Util;
 import main.SharedSources.Util.placeHolderListener;
 
 public class UpdateAccount extends JFrame implements ActionListener {
+
     static int customer_id;
-    
+
     static JLabel usernameLbl = new JLabel("Username:");
     static JLabel passwordLbl = new JLabel("Password:");
     static JLabel password2Lbl = new JLabel("Confirm Password:");
@@ -27,11 +39,13 @@ public class UpdateAccount extends JFrame implements ActionListener {
 
     static JButton updateBtn = new JButton("Update");
     static JButton cancelBtn = new JButton("Cancel");
-    
+
     AccountPage a;
     Customer c;
-    public UpdateAccount(Customer c,AccountPage a) {
-        
+    private Connection conn;
+
+    public UpdateAccount(Customer c, AccountPage a) {
+
         customer_id = c.customerId;
         JOptionPane.showMessageDialog(null, "Here");
         this.setTitle("Update Information");
@@ -84,7 +98,7 @@ public class UpdateAccount extends JFrame implements ActionListener {
 
         updateBtn.addActionListener(this);
         cancelBtn.addActionListener(this);
-        
+
         gbc.gridx = 1;
         gbc.gridy = 5;
         gbc.anchor = GridBagConstraints.LINE_START;
@@ -94,57 +108,62 @@ public class UpdateAccount extends JFrame implements ActionListener {
         this.add(cancelBtn, gbc);
 
         this.setVisible(true);
-        
-        this.a=a;
-        this.c=c;
-    }
-    
-    String url = "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559?user=sql12747559&password=zdI3qyjlca";
 
-    
+        this.a = a;
+        this.c = c;
+    }
+
+    private void connectToDatabase() {
+        try {
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://sql12.freesqldatabase.com:3306/sql12747559",
+                    "sql12747559",
+                    "zdI3qyjlca"
+            );
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage());
+        }
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == updateBtn) {
-         JOptionPane.showMessageDialog(null, "Update Successfully.hi"+customer_id, "Info", JOptionPane.INFORMATION_MESSAGE);
-
+            connectToDatabase();
             String uName = username.getText();
-            String pass =new String( password.getPassword());
-            System.out.println(uName+"\n"+pass);
-            //
-            String sql = "UPDATE Customer SET username = '" + uName + "', password = '" + pass + "' WHERE id = " + customer_id;
-            
+            String pass = new String(password.getPassword());
+            String pass2 = new String(password2.getPassword());
+            System.out.println(uName + "\n" + pass);
 
-        try (Connection connection = DriverManager.getConnection(url);
-             Statement stmt = connection.createStatement()) {
-
-            int rowsInserted = stmt.executeUpdate(sql);
-            if (rowsInserted > 0) {
-                Customer c = new Customer();
-                JOptionPane.showMessageDialog(null, "Update Successfully.hi"+customer_id, "Info", JOptionPane.INFORMATION_MESSAGE);
-
+            if (pass != pass2) {
+                JOptionPane.showMessageDialog(null, "Passwords Do not Match", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Update Failed. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+                String sql = "UPDATE Customer SET username = '" + uName + "', password = '" + pass + "' WHERE id = '" + customer_id + "'";
+
+                try (Statement stmt = conn.createStatement()) {
+
+                    int rowsInserted = stmt.executeUpdate(sql);
+                    if (rowsInserted > 0) {
+                        c.setUsername(uName);
+                        c.setPassword(pass);
+                        JOptionPane.showMessageDialog(null, "Update Successfully", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Update Failed. Please Try Again.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    ex.printStackTrace();
+                }
+
+                this.dispose();
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Database Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-            //
-//            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-            this.dispose();
-        }
+            if (e.getSource() == cancelBtn) {
+//           
+                this.dispose();
+            }
 
-        if (e.getSource() == cancelBtn) {
-//            this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-            this.dispose();
+            a.c = c;
+            a.refresh(c);
         }
-        
-        a.c=c;
-        a.refresh(c);
     }
-    //for test
-//    public static void main(String[] args) {
-//        UpdateAccount frm = new UpdateAccount(1);
-//    }
 }
-

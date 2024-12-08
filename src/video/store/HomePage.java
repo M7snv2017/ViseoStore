@@ -5,12 +5,28 @@ package video.store;
  * @author Mustafa
  */
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.swing.*;
-import main.SharedSources.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+
+import main.SharedSources.Util;
 import static main.SharedSources.Util.createButton;
 
 public class HomePage extends JFrame {
@@ -77,12 +93,14 @@ public class HomePage extends JFrame {
         });
         panel.add(registerButton);
 
+        /* 
         JLabel adminLoginLabel = new JLabel("Login as an admin", SwingConstants.CENTER);
         adminLoginLabel.setForeground(Color.BLUE);
         adminLoginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Make it look clickable
         adminLoginLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(adminLoginLabel);
+        */
 
         add(panel, BorderLayout.CENTER);
 
